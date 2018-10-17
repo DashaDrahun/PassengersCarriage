@@ -1,0 +1,11 @@
+# folder packages
+/packages
+*/bin/*
+*/obj/*
+/lab2_filestorage/DbDasha.bin
+*.csproj.user
+/dasha_repo
+.vs
+bin
+obj
+packages

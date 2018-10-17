@@ -1,0 +1,18 @@
+﻿@model Lab06.MVC.Carriage.Models.RouteViewModel
+
+<td>
+    <div class="form-group">
+        <input type="hidden" name="RouteId" value="@Model.RouteId" class="form-control" />
+        <input type="text" name="CityArr" value="@Model.CityArr" onclick="removeErrorStyle(this)" class="form-control @Model.HtmlFormatting"/>
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <input type="text" name="CityDepart" value="@Model.CityDepart" onclick="removeErrorStyle(this)" class="form-control @Model.HtmlFormatting" />
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <input type="text" name="Kilometres" value="@Model.Kilometres" onclick="removeErrorStyle(this)" class="form-control @Model.HtmlFormatting" />
+    </div>
+</td>

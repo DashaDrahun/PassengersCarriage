@@ -1,0 +1,25 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/site.css" rel="stylesheet" />
+
+    <title>@ViewBag.Title</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <div class="navbar-brand">@Html.ActionLink("Home", "Index", "Home")</div>
+        <div class="navbar-brand">@Html.ActionLink("Log in", "Login", "Account")</div>
+    </nav>
+    <div>
+        @RenderBody()
+    </div>
+
+    <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+</body>
+</html>

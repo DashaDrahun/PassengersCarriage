@@ -1,0 +1,18 @@
+﻿@using Lab06.MVC.Carriage.Models
+@model IEnumerable<RouteViewModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Passengers Carriage</h1>
+        <p>Here you can look through available routes our company is engaged in</p>
+    </div>
+    @foreach (RouteViewModel route in Model)
+    {
+        <p>@string.Concat(route.CityArr, "-->>", route.CityDepart)</p>
+    }
+</div>
+

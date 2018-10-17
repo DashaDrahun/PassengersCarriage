@@ -1,0 +1,38 @@
+﻿@model Lab06.MVC.Carriage.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h2>Registration</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true, null, new { @class = "colorforerror" })
+    @Html.AntiForgeryToken()
+    <script>console.log(document.cookie)</script>
+    <div>
+        <div class="form-group">
+            <label>Email address</label><br />
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Email, null, new { @class = "colorforerror" })
+        </div>
+        <div class="form-group">
+            <label>Name</label><br />
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Name, null, new { @class = "colorforerror" })
+        </div>
+        <div class="form-group">
+            <label>Password</label><br />
+            @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Password, null, new { @class = "colorforerror" })
+        </div>
+        <div class="form-group">
+            <label>Confirm Password</label><br />
+            @Html.PasswordFor(x => x.PasswordConfirm, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.PasswordConfirm, null, new { @class = "colorforerror" })
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+}
+

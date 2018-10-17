@@ -1,0 +1,32 @@
+﻿@model Lab06.MVC.Carriage.Models.TripViewModel
+
+<td>
+    <div class="form-group">
+        <input type="text" autocomplete="off" onclick="removeErrorStyle(this)" name="DepartureDate" value="@Model.DepartureDate.Date.ToString("yyyy MMMM dd")" class="datepicker_input form-control @Model.HtmlFormatting" />
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <input type="text" autocomplete="off" onclick="removeErrorStyle(this)" name="DepartureTime" value="@Model.DepartureTime.ToString("HH:mm")" class="timepicker_input form-control @Model.HtmlFormatting" />
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <input type="text" autocomplete="off" onclick="removeErrorStyle(this)" name="ArrivalDate" value="@Model.ArrivalDate.Date.ToString("yyyy MMMM dd")" class="datepicker_input form-control @Model.HtmlFormatting" />
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <input type="text" autocomplete="off" onclick="removeErrorStyle(this)" name="ArrivalTime" value="@Model.ArrivalTime.ToString("HH:mm")" class="timepicker_input form-control @Model.HtmlFormatting" />
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <input type="text" name="FreeSeetsNumber" onclick="removeErrorStyle(this)" value="@Model.FreeSeetsNumber" class="form-control @Model.HtmlFormatting" />
+    </div>
+</td>
+<td>
+    <div class="form-group">
+        <input type="text" onclick="removeErrorStyle(this)" name="Price" value="@Model.Price" class="form-control @Model.HtmlFormatting" />
+    </div>
+</td>

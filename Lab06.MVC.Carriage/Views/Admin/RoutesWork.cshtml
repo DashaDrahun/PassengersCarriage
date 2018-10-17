@@ -1,0 +1,46 @@
+﻿@using Lab06.MVC.Carriage.Models
+@using Lab06.MVC.Carriage.ViewModelsForViews.Admin;
+@model RoutesViewModel
+
+@{
+    ViewBag.Title = "ShowRoutes";
+    Layout = "~/Views/Shared/_AdminLayoutPage1.cshtml";
+}
+
+
+@foreach (var errors in ViewContext.ViewData.ModelState.Values)
+{
+    foreach (var err in errors.Errors)
+    {
+        @Html.Partial("_ErrorSmallWindow", err.ErrorMessage)
+    }
+}
+
+<table class="table">
+    <tr>
+        <th>Departure City</th>
+        <th>Arrival City</th>
+        <th>Kilometres</th>
+    </tr>
+    <tr>
+        @using (Html.BeginForm())
+        {
+            @Html.Partial("Route", Model.WrongInputRouteViewModel ?? new RouteViewModel())
+            <td>
+                <input class="btn btn-primary" type="submit" name="submitButton" value="Create" />
+            </td>
+        }
+    </tr>
+
+    @foreach (var item in Model.Routes)
+    {
+        <tr>
+            @using (Html.BeginForm())
+            {
+                @Html.Partial("Route", item)
+                @Html.Partial("_OptionsEditing", item)
+            }
+        </tr>
+    }
+</table>
+
