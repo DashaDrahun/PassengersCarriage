@@ -12,11 +12,13 @@
     <script type="text/javascript" src="/Scripts/jquery.validate.unobtrusive.min.js"></script>
     <script type="text/javascript" src="/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript" src="~/Scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/admin.editing.js"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-        <div class="navbar-brand">@Html.ActionLink("Trips", "Trips", "RegisteredUser")</div>
+        <div class="navbar-brand">@Html.ActionLink("Routes", "RoutesWork", "Admin")</div>
+        <div class="navbar-brand">@Html.ActionLink("Trips", "TripsWork", "Admin")</div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -26,7 +28,7 @@
                 <li class="nav-item">
                     <a class="nav-link active">
                         @{
-                            Html.RenderAction("RenderHelloUser", "RegisteredUser");
+                            Html.RenderAction("RenderHelloUser", "Admin");
                         }
                     </a>
                 </li>
@@ -38,15 +40,9 @@
     </nav>
 
     <div>
-        <div>
-            @if (TempData["message"] != null)
-            {
-                <div class="alert alert-success">@TempData["message"]</div>
-            }
-        </div>
         @RenderBody()
         @RenderSection("scripts", required: false)
     </div>
-
+    
 </body>
 </html>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
@@ -60,6 +61,11 @@ namespace Lab06.MVC.Carriage.Controllers
             IEnumerable<RouteModel> routeModels = userService.GetAllRoutes();
             List<RouteViewModel> allRoutesVm = mapper.Map<IEnumerable<RouteModel>, List<RouteViewModel>>(routeModels);
             return View(allRoutesVm);
+        }
+
+        public ActionResult Test()
+        {
+            throw new ArgumentNullException("Test mistake");
         }
     }
 }

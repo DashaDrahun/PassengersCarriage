@@ -3,7 +3,7 @@
 
 @{
     ViewBag.Title = "TripsWork";
-    Layout = "~/Views/Shared/_AdminLayoutPage1.cshtml";
+    Layout = "~/Views/Shared/_AdminLayoutPage.cshtml";
 }
 
 @foreach (var errors in ViewContext.ViewData.ModelState.Values)
@@ -66,12 +66,16 @@
     }
 </table>
 
-@if (Model.WrongInputTripViewModel != null)
-{
-    <script>
-        document.addEventListener('DOMContentLoaded',function(){
-            makeOptionSelected(@Model.WrongInputTripViewModel.RouteId);
-            makeSelectRed();
-        });
-    </script>
+@section Scripts {
+    @if (Model.WrongInputTripViewModel != null)
+    {
+        <script>
+            document.addEventListener('DOMContentLoaded',function(){
+                makeOptionSelected(@Model.WrongInputTripViewModel.RouteId);
+                makeSelectRed();
+            });
+        </script>
+    }
+    <script type="text/javascript" src="~/Scripts/jquery.datetimepicker.full.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/admin.datepicker.setting.js"></script>
 }
