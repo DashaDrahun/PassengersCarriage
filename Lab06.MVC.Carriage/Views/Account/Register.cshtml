@@ -4,14 +4,13 @@
     ViewBag.Title = "Register";
 }
 
-<h2>Registration</h2>
-
 @using (Html.BeginForm())
 {
     @Html.ValidationSummary(true, null, new { @class = "colorforerror" })
     @Html.AntiForgeryToken()
-    <script>console.log(document.cookie)</script>
-    <div>
+<div class="row">
+    <div class="col-md-3 offset-4">
+        <h2 style="text-align: center">Registration</h2>
         <div class="form-group">
             <label>Email address</label><br />
             @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
@@ -34,5 +33,6 @@
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </div>
+</div>
 }
 
