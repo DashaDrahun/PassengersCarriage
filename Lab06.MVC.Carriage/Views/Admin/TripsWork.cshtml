@@ -37,7 +37,7 @@
                     </select>
                 </div>
             </td>
-            @Html.Partial("Trip", Model.WrongInputTripViewModel ?? new TripViewModel())
+            @Html.Partial("Trip", Model.WrongInputTripViewModel ?? new TripViewModel() { ArrivalDate = DateTime.Now, DepartureDate = DateTime.Now, ArrivalTime = DateTime.Now.AddHours(1), DepartureTime = DateTime.Now})
             <td>
                 <input class="btn btn-primary" type="submit" name="submitButton" value="Create" />
             </td>

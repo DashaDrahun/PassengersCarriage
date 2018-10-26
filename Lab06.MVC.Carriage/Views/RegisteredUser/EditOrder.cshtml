@@ -5,6 +5,19 @@
     Layout = "~/Views/Shared/_RegisteredUsersLayoutPage.cshtml";
 }
 
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+    td {
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        background-color: azure;
+        text-align: center
+    }
+</style>
+
 @using (Html.BeginForm("EditOrder", "RegisteredUser"))
 {
     @Html.AntiForgeryToken()
@@ -40,7 +53,7 @@
                 <dt>
                     @Html.DisplayNameFor(model => model.Trip.DepartureDate)
                 </dt>
-                <dd>j 
+                <dd>
                     @Html.DisplayFor(model => model.Trip.DepartureDate)
                 </dd>
                 <dt>
@@ -75,6 +88,43 @@
                     </div>
                 </div>
             </div>
+            <table class="table-bordered">
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
 
         </div>
     </div>
