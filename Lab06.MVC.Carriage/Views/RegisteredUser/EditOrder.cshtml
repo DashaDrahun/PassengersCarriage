@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Book ticket";
+    Layout = "~/Views/Shared/_RegisteredUsersLayoutPage.cshtml";
 }
 
 @using (Html.BeginForm("EditOrder", "RegisteredUser"))
@@ -39,7 +40,7 @@
                 <dt>
                     @Html.DisplayNameFor(model => model.Trip.DepartureDate)
                 </dt>
-                <dd>
+                <dd>j 
                     @Html.DisplayFor(model => model.Trip.DepartureDate)
                 </dd>
                 <dt>

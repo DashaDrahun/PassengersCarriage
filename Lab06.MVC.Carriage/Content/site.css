@@ -1,7 +1,12 @@
-﻿.colorforerror {
-     background-color: #f8d7da;
-     color: #930;
- }
+﻿body {
+    background-color:lavender;
+    font-family: 'Helvetica';
+}
+
+.colorforerror {
+    background-color: #f8d7da;
+    color: #930;
+}
 
 .validerror {
     color: red;

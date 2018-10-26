@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper;
 using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.BL.Model;
+using Lab06.MVC.Carriage.ModelBuilders;
 using Lab06.MVC.Carriage.Models;
 
 namespace Lab06.MVC.Carriage.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUserService userService;
-        private readonly IMapper mapper;
+        private readonly IModelBuilder modelBuilder;
 
-        public HomeController(IUserService userService, IMapper mapper)
+        public HomeController(IModelBuilder modelBuilder)
         {
-            this.userService = userService;
-            this.mapper = mapper;
+            this.modelBuilder = modelBuilder;
         }
 
         [HttpGet]
@@ -58,9 +58,9 @@ namespace Lab06.MVC.Carriage.Controllers
 
         public ActionResult Index()
         {
-            IEnumerable<RouteModel> routeModels = userService.GetAllRoutes();
-            List<RouteViewModel> allRoutesVm = mapper.Map<IEnumerable<RouteModel>, List<RouteViewModel>>(routeModels);
-            return View(allRoutesVm);
+            var model = modelBuilder.Build();
+
+            return View(model);
         }
 
         public ActionResult Test()

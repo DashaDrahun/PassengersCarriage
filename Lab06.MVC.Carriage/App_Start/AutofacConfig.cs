@@ -7,6 +7,7 @@ using Lab06.MVC.Carriage.DAL.Entities;
 using Lab06.MVC.Carriage.DAL.Identity;
 using Lab06.MVC.Carriage.DAL.Interfaces;
 using Lab06.MVC.Carriage.DAL.Repositories;
+using Lab06.MVC.Carriage.ModelBuilders;
 using Microsoft.AspNet.Identity;
 
 namespace Lab06.MVC.Carriage
@@ -59,6 +60,10 @@ namespace Lab06.MVC.Carriage
 
             builder.RegisterType<UserService>()
                 .As<IUserService>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<ModelBuilder>()
+                .As<IModelBuilder>()
                 .InstancePerLifetimeScope();
         }
     }

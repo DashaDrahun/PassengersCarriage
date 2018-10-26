@@ -6,8 +6,8 @@
 }
 
 <div class="container">
-    <h2>Available trips</h2>
-    <table class="table table-bordered">
+    <h2 style="text-align: center">Available trips</h2>
+    <table class="table table-striped table-hover">
         <thead>
             <tr>
                 <th>
@@ -36,16 +36,18 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@string.Concat(item.Route.CityDepart, " ->> ", item.Route.CityArr)</td>
-                <td>@item.DepartureDate.Date.ToString("dd-MM-yyyy")</td>
-                <td>@item.DepartureTime.ToString("HH:mm")</td>
-                <td>@item.ArrivalDate.Date.ToString("dd-MM-yyyy")</td>
-                <td>@item.ArrivalTime.ToString("HH:mm")</td>
-                <td>@item.FreeSeetsNumber</td>
-                <td>@item.Price</td>
-                <td>@Html.ActionLink("Buy ticket", "CreateOrder", new {tripId = item.TripId})</td>
-            </tr>
+                <tr>
+                    <td>@string.Concat(item.Route.CityDepart, " ->> ", item.Route.CityArr)</td>
+                    <td>@item.DepartureDate.Date.ToString("dd-MM-yyyy")</td>
+                    <td>@item.DepartureTime.ToString("HH:mm")</td>
+                    <td>@item.ArrivalDate.Date.ToString("dd-MM-yyyy")</td>
+                    <td>@item.ArrivalTime.ToString("HH:mm")</td>
+                    <td>@item.FreeSeetsNumber</td>
+                    <td>@item.Price</td>
+                    <td>
+                        <input type="button" class="btn btn-success" value="Buy ticket!" onclick="location.href='@Url.Action("CreateOrder", "RegisteredUser" ,new { tripId = item.TripId })'" />
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

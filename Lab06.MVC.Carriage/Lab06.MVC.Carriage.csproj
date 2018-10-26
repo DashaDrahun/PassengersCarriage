@@ -147,6 +147,14 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\site.css" />
+    <Content Include="Images\2029335_original.jpg" />
+    <Content Include="Images\3.jpg" />
+    <Content Include="Images\4.jpg" />
+    <Content Include="Images\5.jpg" />
+    <Content Include="Images\maxresdefault.jpg" />
+    <Content Include="Images\minsk_ostrov_slez_svisloch_vecher.jpg" />
+    <Content Include="Images\most-8.jpg" />
+    <Content Include="Images\Мозырь.jpg" />
     <Content Include="Scripts\admin.datepicker.setting.js" />
     <Content Include="Scripts\admin.editing.js" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
@@ -186,11 +194,15 @@
     <Compile Include="Controllers\RegisteredUserController.cs" />
     <Compile Include="Enums\BelarusInfo.cs" />
     <Compile Include="Enums\MotorVehicles.cs" />
+    <Compile Include="Extensions\RandomCollectionElement.cs" />
     <Compile Include="Filters\HandleExceptionAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="ModelBuilders\IModelBuilder.cs" />
+    <Compile Include="ModelBuilders\ModelBuilder.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
+    <Compile Include="Models\HomeIndexViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\OrderViewModel.cs" />
     <Compile Include="Models\RegisterViewModel.cs" />
