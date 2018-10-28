@@ -38,7 +38,7 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@string.Concat(item.Route.CityDepart, " ->> ", item.Route.CityArr)</td>
+                    <td>@string.Concat(item.Route.CityDepart, " → ", item.Route.CityArr)</td>
                     <td>@item.DepartureDate.Date.ToString("dd-MM-yyyy")</td>
                     <td>@item.DepartureTime.ToString("HH:mm")</td>
                     <td>@item.ArrivalDate.Date.ToString("dd-MM-yyyy")</td>

@@ -69,7 +69,7 @@ namespace Lab06.MVC.Carriage.Controllers
                     //TempData["message"] = $"Ticket to trip {order.Trip.Route.CityDepart}-{trip.Route.CityArr}" +
                     //                      $"was booked. Your seat number is {order.SeatNumber}";
                     TempData["message"] = $"Ticket to trip {trip.Route.CityDepart}-{trip.Route.CityArr}" +
-                                          $"was booked. Your seat number is {order.SeatNumber}";
+                                          $" was booked. Your seat number is {order.SeatNumber}";
                 }
 
                 return RedirectToAction("Trips");

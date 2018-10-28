@@ -32,7 +32,7 @@
                     <select name="RouteId" class="form-control" onclick="removeErrorStyle(this)">
                         @foreach (var route in Model.Routes)
                         {
-                            <option value="@route.RouteId">@string.Concat(route.CityDepart, " ->> ", route.CityArr)</option>
+                            <option value="@route.RouteId">@string.Concat(route.CityDepart, " → ", route.CityArr)</option>
                         }
                     </select>
                 </div>
