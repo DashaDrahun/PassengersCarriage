@@ -15,7 +15,8 @@ namespace Lab06.MVC.Carriage.DAL.Entities
 
         public DateTime Arrival { get; set; }
 
-        public byte FreeSeetsNumber { get; set; }
+        //todo: serialise: int[] -> string -> xml 
+        public string FreeSeetsNumbers { get; set; }
 
         public double Price { get; set; }
 

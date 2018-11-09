@@ -37,9 +37,11 @@ namespace Lab06.MVC.Carriage.DAL.Initializers
             roleManager.Create(roleUser);
 
             var admin = new AppUser { Email = "admin@mail.ru", UserName = "Admin", FirstName = "Darya", LastName = "Drahun"};
+            var user = new AppUser { Email = "dar@mail.ru", UserName = "Darya", FirstName = "Darya", LastName = "Drahun" };
             userManager.Create(admin, "qwerty");
+            userManager.Create(user, "qwerty");
             userManager.AddToRole(admin.Id, "Admin");
-
+            userManager.AddToRole(user.Id, "User");
             base.Seed(context);
         }
     }

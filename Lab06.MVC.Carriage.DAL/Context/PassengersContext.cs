@@ -38,7 +38,7 @@ namespace Lab06.MVC.Carriage.DAL.Context
             modelBuilder.Entity<Trip>().HasKey(p => p.TripId);
             modelBuilder.Entity<Trip>().Property(p => p.Arrival).IsRequired();
             modelBuilder.Entity<Trip>().Property(p => p.Departure).IsRequired();
-            modelBuilder.Entity<Trip>().Property(p => p.FreeSeetsNumber).IsRequired();
+            modelBuilder.Entity<Trip>().Property(p => p.FreeSeetsNumbers).HasColumnType("xml").IsRequired();
             modelBuilder.Entity<Trip>().Property(p => p.Price).IsRequired();
             modelBuilder.Entity<Trip>().HasRequired(p => p.Route).WithMany(p => p.Trips).HasForeignKey(p => p.RouteId);
 

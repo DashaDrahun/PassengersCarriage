@@ -8,6 +8,6 @@
 
         public string UserId { get; set; }
 
-        public byte SeatNumber { get; set; }
+        public int SeatNumber { get; set; }
     }
 }

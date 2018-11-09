@@ -11,6 +11,6 @@ namespace Lab06.MVC.Carriage.Models
         public TripViewModel Trip { get; set; }
 
         [DisplayName("Seat number")]
-        public byte SeatNumber { get; set; }
+        public int SeatNumber { get; set; }
     }
 }

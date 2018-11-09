@@ -106,6 +106,8 @@ namespace Lab06.MVC.Carriage.Controllers
             if (ModelState.IsValid)
             {
                 var tripModel = mapper.Map<TripViewModel, TripModel>(tripVm);
+                tripModel.NumbersOfFreeSeats = Enumerable.Range(1, tripVm.FreeSeatNumber).ToList();
+
                 try
                 {
                     switch (submitButton)
@@ -146,9 +148,10 @@ namespace Lab06.MVC.Carriage.Controllers
                         x.ArrivalTime = tripVm.ArrivalTime;
                         x.DepartureDate = tripVm.DepartureDate;
                         x.DepartureTime = tripVm.DepartureTime;
-                        x.FreeSeetsNumber = tripVm.FreeSeetsNumber;
+                        x.FreeSeatNumber = tripVm.FreeSeatNumber;
                         x.Price = tripVm.Price;
                         x.HtmlFormatting = " colorforerror";
+                        x.FreeSeatNumber = tripVm.FreeSeatNumber;
                     });
                 }
             }

@@ -30,7 +30,11 @@ namespace Lab06.MVC.Carriage.BL.Services
         {
             var mapper =
                 new MapperConfiguration(cfg =>
-                    cfg.CreateMap<Trip, TripModel>().ForSourceMember(x => x.Orders, y => y.Ignore())).CreateMapper();
+                    cfg.CreateMap<Trip, TripModel>()
+                        .ForMember(v => v.NumbersOfFreeSeats,
+                            opts => opts.MapFrom(src => src.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x))))
+                        .ForSourceMember(x => x.Orders, y => y.Ignore()))
+                    .CreateMapper();
             return mapper.Map<IEnumerable<Trip>, List<TripModel>>(tripRepository.GetAll());
         }
 
@@ -38,12 +42,14 @@ namespace Lab06.MVC.Carriage.BL.Services
         {
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TripModel, Trip>().IgnoreAllVirtual()).CreateMapper();
             var tripPoco = mapper.Map<Trip>(item);
+            tripPoco.FreeSeetsNumbers = string.Join(" ", item.NumbersOfFreeSeats.Select(x => x.ToString()));
             tripRepository.Create(tripPoco);
             unitOfWork.Save();
         }
 
         public void UpdateTrip(TripModel item)
         {
+            // todo: проверка на существование заказа, если да - отменить обновление, выдать сообщение
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TripModel, Trip>().IgnoreAllVirtual()).CreateMapper();
             var tripPoco = mapper.Map<Trip>(item);
             tripRepository.Update(tripPoco);
@@ -52,6 +58,7 @@ namespace Lab06.MVC.Carriage.BL.Services
 
         public void DeleteTrip(TripModel item)
         {
+            // todo: проверка на существование заказа, если да - отменить удаление, выдать сообщение
             var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TripModel, Trip>().IgnoreAllVirtual()).CreateMapper();
             var tripPoco = mapper.Map<Trip>(item);
             tripRepository.Delete(tripPoco);

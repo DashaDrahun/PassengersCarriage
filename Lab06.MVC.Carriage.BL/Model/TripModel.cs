@@ -1,4 +1,7 @@
-﻿namespace Lab06.MVC.Carriage.BL.Model
+﻿using System;
+using System.Collections.Generic;
+
+namespace Lab06.MVC.Carriage.BL.Model
 {
     public class TripModel
     {
@@ -8,11 +11,11 @@
 
         public virtual RouteModel Route { get; set; }
 
-        public System.DateTime Departure { get; set; }
+        public DateTime Departure { get; set; }
 
-        public System.DateTime Arrival { get; set; }
+        public DateTime Arrival { get; set; }
 
-        public byte FreeSeetsNumber { get; set; }
+        public List<int> NumbersOfFreeSeats { get; set; }
 
         public double Price { get; set; }
     }

@@ -37,11 +37,13 @@ namespace Lab06.MVC.Carriage.Models
         public System.DateTime ArrivalTime { get; set; }
 
         [Required]
-        public byte FreeSeetsNumber { get; set; }
+        public int FreeSeatNumber { get; set; }
 
         [Required]
         [Range(3, 1000, ErrorMessage = "Price must be > 3")]
         public double Price { get; set; }
+
+        public List<int> NumbersOfFreeSeats { get; set; }
 
         public string HtmlFormatting { get; set; }
 
@@ -51,7 +53,7 @@ namespace Lab06.MVC.Carriage.Models
 
             var maxNumberSeats = Enum.GetValues(typeof(MotorVehiclesSeets)).Cast<int>().Max();
 
-            if (FreeSeetsNumber <= 0 || FreeSeetsNumber > maxNumberSeats)
+            if (FreeSeatNumber <= 0 || FreeSeatNumber > maxNumberSeats)
             {
                 errors.Add(new ValidationResult("FreeSeetsNumber must be > 0 and <= max seets number in motor vehicle"));
             }

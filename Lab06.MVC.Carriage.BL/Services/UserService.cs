@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.DAL.Entities;
@@ -32,7 +33,11 @@ namespace Lab06.MVC.Carriage.BL.Services
         {
             var mapper =
                 new MapperConfiguration(cfg =>
-                    cfg.CreateMap<Trip, TripModel>().ForSourceMember(x => x.Orders, y => y.Ignore())).CreateMapper();
+                        cfg.CreateMap<Trip, TripModel>()
+                            .ForMember(v => v.NumbersOfFreeSeats,
+                                opts => opts.MapFrom(src => src.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x))))
+                            .ForSourceMember(x => x.Orders, y => y.Ignore()))
+                    .CreateMapper();
             return mapper.Map<Trip, TripModel>(tripRepository.GetById(tripId));
         }
 
@@ -40,8 +45,12 @@ namespace Lab06.MVC.Carriage.BL.Services
         {
             var mapper =
                 new MapperConfiguration(cfg =>
-                    cfg.CreateMap<Trip, TripModel>().ForSourceMember(x => x.Orders, y => y.Ignore())).CreateMapper();
-            return mapper.Map<IEnumerable<Trip>, List<TripModel>>(tripRepository.Get(x => x.Departure.CompareTo(DateTime.Now) > 0 && x.FreeSeetsNumber>0));
+                        cfg.CreateMap<Trip, TripModel>()
+                            .ForMember(v => v.NumbersOfFreeSeats,
+                                opts => opts.MapFrom(src => src.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x))))
+                            .ForSourceMember(x => x.Orders, y => y.Ignore()))
+                    .CreateMapper();
+            return mapper.Map<IEnumerable<Trip>, List<TripModel>>(tripRepository.GetAll());
         }
 
         public IEnumerable<RouteModel> GetAllRoutes()
@@ -61,16 +70,20 @@ namespace Lab06.MVC.Carriage.BL.Services
             var order = mapper.Map<OrderModel, Order>(orderModel);
 
             orderRepository.Update(order);
-            DecreaseSeatsNumberForTrip(tripRepository.GetById(orderModel.TripId));
+            DecreaseSeatsNumberForTrip(tripRepository.GetById(orderModel.TripId), orderModel.SeatNumber);
             unitOfWork.Save();
 
             return true;
         }
 
-        private bool DecreaseSeatsNumberForTrip(Trip trip)
+        private bool DecreaseSeatsNumberForTrip(Trip trip, int seatNumber)
         {
-            trip.FreeSeetsNumber -= 1;
+            var freeSeatsArrayUpdated = trip.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x)).ToList();
+            trip.FreeSeetsNumbers = freeSeatsArrayUpdated.Remove(seatNumber) 
+                ? String.Join(" ", freeSeatsArrayUpdated.Select(x => x.ToString())) 
+                : throw new PassengersCarriageValidationException($"Seat № {seatNumber} not found in trip № {trip.TripId}");
             tripRepository.Update(trip);
+
             return true;
         }
     }

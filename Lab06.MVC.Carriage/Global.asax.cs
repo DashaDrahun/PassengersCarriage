@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Autofac.Integration.Mvc;
@@ -6,6 +7,7 @@ using Autofac;
 using AutoMapper;
 using Lab06.MVC.Carriage.Models;
 using Lab06.MVC.Carriage.BL.Model;
+using Lab06.MVC.Carriage.DAL.Entities;
 using Lab06.MVC.Carriage.Filters;
 
 namespace Lab06.MVC.Carriage
@@ -63,7 +65,11 @@ namespace Lab06.MVC.Carriage
                         opt => opt.MapFrom(src => src.Route))
                     .ForMember(
                         v => v.HtmlFormatting,
-                        opt => opt.MapFrom(src => String.Empty));
+                        opt => opt.MapFrom(src => String.Empty))
+                    .ForMember(
+                        v => v.FreeSeatNumber,
+                        // todo: надо ли так делать?
+                        opts => opts.MapFrom(src => src.NumbersOfFreeSeats.Count));
             }).CreateMapper();
             builder.RegisterInstance(mapper).As<IMapper>().SingleInstance();
 
