@@ -12,6 +12,6 @@
 
         public virtual AppUser User { get; set; }
 
-        public byte SeatNumber { get; set; }
+        public int SeatNumber { get; set; }
     }
 }

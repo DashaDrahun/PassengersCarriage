@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Autofac;
 using Lab06.MVC.Carriage.BL.Interfaces;
+using Lab06.MVC.Carriage.BL.Mappers;
 using Lab06.MVC.Carriage.BL.Services;
 using Lab06.MVC.Carriage.DAL.Context;
 using Lab06.MVC.Carriage.DAL.Entities;
@@ -64,6 +65,18 @@ namespace Lab06.MVC.Carriage
 
             builder.RegisterType<ModelBuilder>()
                 .As<IModelBuilder>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<TripMapper>()
+                .As<ITripMapper>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<RouteMapper>()
+                .As<IRouteMapper>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<OrderMapper>()
+                .As<IOrderMapper>()
                 .InstancePerLifetimeScope();
         }
     }

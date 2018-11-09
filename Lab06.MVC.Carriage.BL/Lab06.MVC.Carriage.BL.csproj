@@ -105,6 +105,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\IOrderMapper.cs" />
+    <Compile Include="Mappers\IRouteMapper.cs" />
+    <Compile Include="Mappers\ITripMapper.cs" />
+    <Compile Include="Mappers\OrderMapper.cs" />
+    <Compile Include="Mappers\RouteMapper.cs" />
+    <Compile Include="Mappers\TripMapper.cs" />
     <Compile Include="Model\OrderModel.cs" />
     <Compile Include="Model\RouteModel.cs" />
     <Compile Include="Model\UserModel.cs" />

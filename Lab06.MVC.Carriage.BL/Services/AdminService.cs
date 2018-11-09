@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AutoMapper;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
+using Lab06.MVC.Carriage.BL.Mappers;
 using Lab06.MVC.Carriage.DAL.Entities;
 using Lab06.MVC.Carriage.DAL.Interfaces;
 
@@ -15,8 +15,10 @@ namespace Lab06.MVC.Carriage.BL.Services
         private readonly IUnitOfWork unitOfWork;
         private readonly IRepository<Trip> tripRepository;
         private readonly IRepository<Route> routeRepository;
+        private readonly ITripMapper tripMapper;
+        private readonly IRouteMapper routeMapper;
 
-        public AdminService(IUnitOfWork unitOfWork)
+        public AdminService(IUnitOfWork unitOfWork, ITripMapper tripMapper, IRouteMapper routeMapper)
         {
             this.unitOfWork = unitOfWork
                               ?? throw new ArgumentNullException(nameof(unitOfWork));
@@ -24,25 +26,20 @@ namespace Lab06.MVC.Carriage.BL.Services
                 ??throw new ArgumentNullException(nameof(tripRepository));
             routeRepository = this.unitOfWork.GetRepository<Route>()
                              ?? throw new ArgumentNullException(nameof(routeRepository));
+            this.tripMapper = tripMapper
+                ?? throw new ArgumentNullException(nameof(tripMapper));
+            this.routeMapper = routeMapper
+                              ?? throw new ArgumentNullException(nameof(routeMapper));
         }
 
         public IEnumerable<TripModel> GetAllTrips()
         {
-            var mapper =
-                new MapperConfiguration(cfg =>
-                    cfg.CreateMap<Trip, TripModel>()
-                        .ForMember(v => v.NumbersOfFreeSeats,
-                            opts => opts.MapFrom(src => src.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x))))
-                        .ForSourceMember(x => x.Orders, y => y.Ignore()))
-                    .CreateMapper();
-            return mapper.Map<IEnumerable<Trip>, List<TripModel>>(tripRepository.GetAll());
+            return tripMapper.MapCollectionModels(tripRepository.GetAll());
         }
 
         public void CreateTrip(TripModel item)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TripModel, Trip>().IgnoreAllVirtual()).CreateMapper();
-            var tripPoco = mapper.Map<Trip>(item);
-            tripPoco.FreeSeetsNumbers = string.Join(" ", item.NumbersOfFreeSeats.Select(x => x.ToString()));
+            var tripPoco = tripMapper.MapEntity(item);
             tripRepository.Create(tripPoco);
             unitOfWork.Save();
         }
@@ -50,8 +47,7 @@ namespace Lab06.MVC.Carriage.BL.Services
         public void UpdateTrip(TripModel item)
         {
             // todo: проверка на существование заказа, если да - отменить обновление, выдать сообщение
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TripModel, Trip>().IgnoreAllVirtual()).CreateMapper();
-            var tripPoco = mapper.Map<Trip>(item);
+            var tripPoco = tripMapper.MapEntity(item);
             tripRepository.Update(tripPoco);
             unitOfWork.Save();
         }
@@ -59,22 +55,20 @@ namespace Lab06.MVC.Carriage.BL.Services
         public void DeleteTrip(TripModel item)
         {
             // todo: проверка на существование заказа, если да - отменить удаление, выдать сообщение
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<TripModel, Trip>().IgnoreAllVirtual()).CreateMapper();
-            var tripPoco = mapper.Map<Trip>(item);
+            var tripPoco = tripMapper.MapEntity(item);
             tripRepository.Delete(tripPoco);
             unitOfWork.Save();
         }
 
         public IEnumerable<RouteModel> GetAllRoutes()
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<Route, RouteModel>().IgnoreAllVirtual()).CreateMapper();
-            return mapper.Map<IEnumerable<Route>, List<RouteModel>>(routeRepository.GetAll());
+            return routeMapper.MapCollectionModels(routeRepository.GetAll());
         }
 
         public void CreateRoute(RouteModel item)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<RouteModel, Route>().IgnoreAllVirtual()).CreateMapper();
-            var routePoco = mapper.Map<Route>(item);
+            var routePoco = routeMapper.MapEntity(item);
+
             if (GetExistedRoute(item)==null)
             {
                 routeRepository.Create(routePoco);
@@ -88,8 +82,8 @@ namespace Lab06.MVC.Carriage.BL.Services
 
         public void UpdateRoute(RouteModel item)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<RouteModel, Route>().IgnoreAllVirtual()).CreateMapper();
-            var routePoco = mapper.Map<Route>(item);
+            var routePoco = routeMapper.MapEntity(item);
+
             if (GetExistedRoute(item) == null || GetExistedRoute(item).RouteId == item.RouteId)
             {
                 routeRepository.Update(routePoco);
@@ -103,8 +97,7 @@ namespace Lab06.MVC.Carriage.BL.Services
 
         public void DeleteRoute(RouteModel item)
         {
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<RouteModel, Route>().IgnoreAllVirtual()).CreateMapper();
-            var routePoco = mapper.Map<Route>(item);
+            var routePoco = routeMapper.MapEntity(item);
             routeRepository.Delete(routePoco);
             try
             {
@@ -116,6 +109,9 @@ namespace Lab06.MVC.Carriage.BL.Services
             }
         }
 
-        public Route GetExistedRoute(RouteModel route) => routeRepository.Get(r => r.CityArr == route.CityArr && r.CityDepart == route.CityDepart).FirstOrDefault();
+        public Route GetExistedRoute(RouteModel route) => 
+            routeRepository.Get(r => r.CityArr == route.CityArr 
+                                     && r.CityDepart == route.CityDepart)
+                .FirstOrDefault();
     }
 }
