@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
@@ -6,6 +7,7 @@ using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.DAL.Entities;
+using Lab06.MVC.Carriage.ModelBuilders;
 using Lab06.MVC.Carriage.Models;
 using Microsoft.AspNet.Identity;
 
@@ -16,24 +18,23 @@ namespace Lab06.MVC.Carriage.Controllers
     {
         private readonly IUserService userService;
         private readonly IMapper mapper;
+        private readonly IModelBuilder modelBuilder;
+
+        public RegisteredUserController(IUserService userService, IMapper mapper, IModelBuilder modelBuilder)
+        {
+            this.userService = userService
+                               ?? throw new ArgumentNullException(nameof(userService));
+            this.mapper = mapper
+                          ?? throw new ArgumentNullException(nameof(mapper));
+            this.modelBuilder = modelBuilder
+                                ?? throw new ArgumentNullException(nameof(modelBuilder));
+        }
 
 
         private List<TripViewModel> GetAllTrips()
         {
             IEnumerable<TripModel> tripModels = userService.GetAllTrips();
             return mapper.Map<IEnumerable<TripModel>, List<TripViewModel>>(tripModels);
-        }
-
-        public RegisteredUserController(IUserService userService, IMapper mapper)
-        {
-            this.userService = userService;
-            this.mapper = mapper;
-        }
-
-        public ActionResult Start()
-        {
-            var model = GetAllTrips();
-            return View("Trips", model);
         }
 
         public ActionResult Trips()
@@ -45,14 +46,7 @@ namespace Lab06.MVC.Carriage.Controllers
         public ActionResult CreateOrder(int tripId)
         {
             var trip = userService.GetTripById(tripId);
-            var model = new OrderViewModel
-            {
-                TripId = tripId,
-                Trip = mapper.Map<TripModel, TripViewModel>(trip),
-                SeatNumber = trip.NumbersOfFreeSeats.Count > 0 
-                    ? trip.NumbersOfFreeSeats.First() 
-                    : throw new PassengersCarriageValidationException($"No free seats for trip with id {tripId}")
-            };
+            var model = modelBuilder.BuilOrderViewModel(trip);
 
             return View("EditOrder", model);
         }
@@ -62,20 +56,12 @@ namespace Lab06.MVC.Carriage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var trip = userService.GetTripById(order.TripId);
-                var orderModel = new OrderModel
-                {
-                    TripId = order.TripId,
-                    SeatNumber = order.SeatNumber,
-                    UserId = User.Identity.GetUserId(),
-                };
-
+                var orderModel = modelBuilder.BuildOrderModel(order, User.Identity.GetUserId());
                 var result = userService.SaveOrder(orderModel);
 
                 if (result)
                 {
-                    //TempData["message"] = $"Ticket to trip {order.Trip.Route.CityDepart}-{trip.Route.CityArr}" +
-                    //                      $"was booked. Your seat number is {order.SeatNumber}";
+                    var trip = userService.GetTripById(order.TripId);
                     TempData["message"] = $"Ticket to trip {trip.Route.CityDepart}-{trip.Route.CityArr}" +
                                           $" was booked. Your seat number is {order.SeatNumber}";
                 }

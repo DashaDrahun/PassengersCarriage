@@ -45,7 +45,8 @@ namespace Lab06.MVC.Carriage.BL.Services
 
         public IEnumerable<TripModel> GetAllTrips()
         {
-            return tripMapper.MapCollectionModels(tripRepository.GetAll());
+            var trips = tripMapper.MapCollectionModels(tripRepository.GetAll());
+            return trips.Where(x => x.NumbersOfFreeSeats.Count > 0);
         }
 
         public IEnumerable<RouteModel> GetAllRoutes()

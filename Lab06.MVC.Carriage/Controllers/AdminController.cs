@@ -6,6 +6,8 @@ using AutoMapper;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
+using Lab06.MVC.Carriage.DAL.Entities;
+using Lab06.MVC.Carriage.ModelBuilders;
 using Lab06.MVC.Carriage.Models;
 using Lab06.MVC.Carriage.ViewModelsForViews.Admin;
 
@@ -16,35 +18,31 @@ namespace Lab06.MVC.Carriage.Controllers
     {
         private readonly IAdminService adminService;
         private readonly IMapper mapper;
+        private readonly IModelBuilder modelBuilder;
 
-        public AdminController(IAdminService adminService, IMapper mapper)
+        public AdminController(IAdminService adminService, IMapper mapper, IModelBuilder modelBuilder)
         {
-            this.adminService = adminService;
-            this.mapper = mapper;
+            this.adminService = adminService
+                                ?? throw new ArgumentNullException(nameof(adminService));
+            this.mapper = mapper
+                          ?? throw new ArgumentNullException(nameof(mapper));
+            this.modelBuilder = modelBuilder
+                                ?? throw new ArgumentNullException(nameof(modelBuilder));
         }
 
         private RoutesViewModel GetAllRoutes()
         {
             IEnumerable<RouteModel> routeModels = adminService.GetAllRoutes();
-            var routeVMs = mapper.Map<IEnumerable<RouteModel>, List<RouteViewModel>>(routeModels);
 
-            return new RoutesViewModel
-            {
-                Routes = routeVMs
-            };
+            return modelBuilder.BuildValidRoutesViewModel(routeModels);
         }
 
         private TripsViewModel GetAllTrips()
         {
-            IEnumerable<TripModel> tripModels = adminService.GetAllTrips();
-            var tripVMs = mapper.Map<IEnumerable<TripModel>, List<TripViewModel>>(tripModels);
+            var tripModels = adminService.GetAllTrips();
+            var routeModels = adminService.GetAllRoutes();
 
-            return new TripsViewModel
-            {
-                Trips = tripVMs,
-                Routes = mapper.Map<IEnumerable<RouteModel>,
-                      List<RouteViewModel>>(adminService.GetAllRoutes())
-            };
+            return modelBuilder.BuildValidTripsViewModel(tripModels, routeModels);
         }
 
         [HttpPost]
@@ -82,18 +80,11 @@ namespace Lab06.MVC.Carriage.Controllers
             {
                 if (routeVm.RouteId == 0)
                 {
-                    routeVm.HtmlFormatting = " colorforerror";
-                    allRoutesVm.WrongInputRouteViewModel = routeVm;
+                    modelBuilder.RebuildNewInvalidRoutesViewModel(allRoutesVm, routeVm);
                 }
                 else
                 {
-                    allRoutesVm.Routes.Where(x => x.RouteId == routeVm.RouteId).ToList().ForEach(x =>
-                    {
-                        x.CityArr = routeVm.CityArr;
-                        x.CityDepart = routeVm.CityDepart;
-                        x.HtmlFormatting = " colorforerror";
-                        x.Kilometres = routeVm.Kilometres;
-                    });
+                    modelBuilder.RebuildOldItemsInvalidRoutesViewModel(allRoutesVm, routeVm);
                 }
             }
 
@@ -105,8 +96,7 @@ namespace Lab06.MVC.Carriage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var tripModel = mapper.Map<TripViewModel, TripModel>(tripVm);
-                tripModel.NumbersOfFreeSeats = Enumerable.Range(1, tripVm.FreeSeatNumber).ToList();
+                var tripModel = modelBuilder.BuildNewTripModel(tripVm);
 
                 try
                 {
@@ -137,22 +127,11 @@ namespace Lab06.MVC.Carriage.Controllers
             {
                 if (tripVm.TripId == 0)
                 {
-                    tripVm.HtmlFormatting = " colorforerror";
-                    allTripsVm.WrongInputTripViewModel = tripVm;
+                    modelBuilder.RebuildNewInvalidTripsViewModel(allTripsVm, tripVm);
                 }
                 else
                 {
-                    allTripsVm.Trips.Where(x => x.TripId == tripVm.TripId).ToList().ForEach(x =>
-                    {
-                        x.ArrivalDate = tripVm.ArrivalDate;
-                        x.ArrivalTime = tripVm.ArrivalTime;
-                        x.DepartureDate = tripVm.DepartureDate;
-                        x.DepartureTime = tripVm.DepartureTime;
-                        x.FreeSeatNumber = tripVm.FreeSeatNumber;
-                        x.Price = tripVm.Price;
-                        x.HtmlFormatting = " colorforerror";
-                        x.FreeSeatNumber = tripVm.FreeSeatNumber;
-                    });
+                    modelBuilder.RebuildOldItemsInvalidTripsViewModel(allTripsVm, tripVm);
                 }
             }
             return View(allTripsVm);

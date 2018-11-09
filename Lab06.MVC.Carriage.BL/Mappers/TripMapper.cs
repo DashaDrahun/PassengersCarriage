@@ -22,7 +22,9 @@ namespace Lab06.MVC.Carriage.BL.Mappers
                         cfg.CreateMap<Trip, TripModel>()
                             .ForMember(v => v.NumbersOfFreeSeats,
                                 opts => opts.MapFrom(src =>
-                                    src.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x))))
+                                    !String.IsNullOrWhiteSpace(src.FreeSeetsNumbers)
+                                        ? src.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x))
+                                        : new List<int>()))
                             .ForSourceMember(x => x.Orders, y => y.Ignore());
                         cfg.CreateMap<TripModel, Trip>().IgnoreAllVirtual();
                     })
@@ -36,7 +38,7 @@ namespace Lab06.MVC.Carriage.BL.Mappers
 
         public IEnumerable<TripModel> MapCollectionModels(IEnumerable<Trip> sourceTrips)
         {
-            return mapper.Map<IEnumerable<Trip>, List<TripModel>>(sourceTrips);
+            return mapper.Map<IEnumerable<Trip>, IEnumerable<TripModel>>(sourceTrips);
         }
 
         public Trip MapEntity(TripModel sourceModel)
