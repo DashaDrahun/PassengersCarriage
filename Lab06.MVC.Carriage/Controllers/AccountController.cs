@@ -60,7 +60,7 @@ namespace Lab06.MVC.Carriage.Controllers
                             },
                             claim);
 
-                        return RedirectToAction("Start", "RegisteredUser");
+                        return RedirectToAction("Trips", "RegisteredUser");
                     }
                 }
                 else
@@ -109,7 +109,7 @@ namespace Lab06.MVC.Carriage.Controllers
                             return RedirectToAction("TripsWork", "Admin");
                         }
 
-                        return RedirectToAction("Start", "RegisteredUser");
+                        return RedirectToAction("Trips", "RegisteredUser");
                     }
                 }
             }

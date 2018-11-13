@@ -9,5 +9,7 @@
         public string UserId { get; set; }
 
         public int SeatNumber { get; set; }
+
+        public virtual TripModel Trip { get; set; }
     }
 }

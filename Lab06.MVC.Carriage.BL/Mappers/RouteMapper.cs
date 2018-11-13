@@ -16,12 +16,6 @@ namespace Lab06.MVC.Carriage.BL.Mappers
 
         public RouteMapper()
         {
-            // todo: работает ли для GetAllRoutes() в UserService
-            // было 
-            //             var mapper =
-            //new MapperConfiguration(cfg =>
-            //    cfg.CreateMap<Route, RouteModel>().ForSourceMember(x => x.Trips, y => y.Ignore())).CreateMapper();
-
             mapper =
                 new MapperConfiguration(cfg =>
                     {

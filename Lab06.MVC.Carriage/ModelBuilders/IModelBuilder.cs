@@ -14,12 +14,12 @@ namespace Lab06.MVC.Carriage.ModelBuilders
         HomeIndexViewModel Build();
         OrderViewModel BuilOrderViewModel(TripModel trip);
         OrderModel BuildOrderModel(OrderViewModel order, string userId);
-        RoutesViewModel BuildValidRoutesViewModel(IEnumerable<RouteModel> routeModels);
-        TripsViewModel BuildValidTripsViewModel(IEnumerable<TripModel> tripModels, IEnumerable<RouteModel> routeModels);
-        void RebuildNewInvalidRoutesViewModel(RoutesViewModel validModel, RouteViewModel wrongInputModel);
-        void RebuildOldItemsInvalidRoutesViewModel(RoutesViewModel validModel, RouteViewModel wrongOldModel);
-        TripModel BuildNewTripModel(TripViewModel trip);
-        void RebuildNewInvalidTripsViewModel(TripsViewModel validModel, TripViewModel wrongInputModel);
-        void RebuildOldItemsInvalidTripsViewModel(TripsViewModel validModel, TripViewModel wrongOldModel);
+        RoutesViewModel BuildValidViewModel(IEnumerable<RouteModel> routeModels);
+        TripsViewModel BuildValidViewModel(IEnumerable<TripModel> tripModels, IEnumerable<RouteModel> routeModels);
+        void RebuildNewInvalidViewModel(RoutesViewModel validModel, RouteViewModel wrongInputModel);
+        void RebuildOldItemsInvalidViewModel(RoutesViewModel validModel, RouteViewModel wrongOldModel);
+        TripModel BuildTripModel(TripViewModel trip);
+        void RebuildNewInvalidViewModel(TripsViewModel validModel, TripViewModel wrongInputModel);
+        void RebuildOldItemsInvalidViewModel(TripsViewModel validModel, TripViewModel wrongOldModel);
     }
 }

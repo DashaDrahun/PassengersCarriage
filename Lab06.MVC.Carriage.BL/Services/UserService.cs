@@ -64,6 +64,11 @@ namespace Lab06.MVC.Carriage.BL.Services
             return true;
         }
 
+        public IEnumerable<OrderModel> GetOrders(string userId)
+        {
+            return orderMapper.MapCollectionModels(orderRepository.Get(x => x.UserId == userId));
+        }
+
         private bool DecreaseSeatNumbersForTrip(Trip trip, int seatNumber)
         {
             var freeSeatsArrayUpdated = trip.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x)).ToList();

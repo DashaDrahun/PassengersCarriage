@@ -34,7 +34,7 @@ namespace Lab06.MVC.Carriage.Controllers
         {
             IEnumerable<RouteModel> routeModels = adminService.GetAllRoutes();
 
-            return modelBuilder.BuildValidRoutesViewModel(routeModels);
+            return modelBuilder.BuildValidViewModel(routeModels);
         }
 
         private TripsViewModel GetAllTrips()
@@ -42,7 +42,7 @@ namespace Lab06.MVC.Carriage.Controllers
             var tripModels = adminService.GetAllTrips();
             var routeModels = adminService.GetAllRoutes();
 
-            return modelBuilder.BuildValidTripsViewModel(tripModels, routeModels);
+            return modelBuilder.BuildValidViewModel(tripModels, routeModels);
         }
 
         [HttpPost]
@@ -80,11 +80,11 @@ namespace Lab06.MVC.Carriage.Controllers
             {
                 if (routeVm.RouteId == 0)
                 {
-                    modelBuilder.RebuildNewInvalidRoutesViewModel(allRoutesVm, routeVm);
+                    modelBuilder.RebuildNewInvalidViewModel(allRoutesVm, routeVm);
                 }
                 else
                 {
-                    modelBuilder.RebuildOldItemsInvalidRoutesViewModel(allRoutesVm, routeVm);
+                    modelBuilder.RebuildOldItemsInvalidViewModel(allRoutesVm, routeVm);
                 }
             }
 
@@ -96,7 +96,7 @@ namespace Lab06.MVC.Carriage.Controllers
         {
             if (ModelState.IsValid)
             {
-                var tripModel = modelBuilder.BuildNewTripModel(tripVm);
+                var tripModel = modelBuilder.BuildTripModel(tripVm);
 
                 try
                 {
@@ -127,11 +127,11 @@ namespace Lab06.MVC.Carriage.Controllers
             {
                 if (tripVm.TripId == 0)
                 {
-                    modelBuilder.RebuildNewInvalidTripsViewModel(allTripsVm, tripVm);
+                    modelBuilder.RebuildNewInvalidViewModel(allTripsVm, tripVm);
                 }
                 else
                 {
-                    modelBuilder.RebuildOldItemsInvalidTripsViewModel(allTripsVm, tripVm);
+                    modelBuilder.RebuildOldItemsInvalidViewModel(allTripsVm, tripVm);
                 }
             }
             return View(allTripsVm);

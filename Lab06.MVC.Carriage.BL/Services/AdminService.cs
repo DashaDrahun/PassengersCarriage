@@ -46,18 +46,32 @@ namespace Lab06.MVC.Carriage.BL.Services
 
         public void UpdateTrip(TripModel item)
         {
-            // todo: проверка на существование заказа, если да - отменить обновление, выдать сообщение
             var tripPoco = tripMapper.MapEntity(item);
-            tripRepository.Update(tripPoco);
-            unitOfWork.Save();
+
+            if (tripPoco.Orders == null || tripPoco.Orders.Count == 0)
+            {
+                tripRepository.Update(tripPoco);
+                unitOfWork.Save();
+            }
+            else
+            {
+                throw new PassengersCarriageValidationException("There are orders for this trip, can't be updated", String.Empty);
+            }
         }
 
         public void DeleteTrip(TripModel item)
         {
-            // todo: проверка на существование заказа, если да - отменить удаление, выдать сообщение
             var tripPoco = tripMapper.MapEntity(item);
-            tripRepository.Delete(tripPoco);
-            unitOfWork.Save();
+
+            if (tripPoco.Orders == null || tripPoco.Orders.Count == 0)
+            {
+                tripRepository.Delete(tripPoco);
+                unitOfWork.Save();
+            }
+            else
+            {
+                throw new PassengersCarriageValidationException("There are orders for this trip, can't be deleted", String.Empty);
+            }
         }
 
         public IEnumerable<RouteModel> GetAllRoutes()

@@ -11,5 +11,6 @@ namespace Lab06.MVC.Carriage.BL.Mappers
     public interface IOrderMapper
     {
         Order MapEntity(OrderModel sourceModel);
+        IEnumerable<OrderModel> MapCollectionModels(IEnumerable<Order> sourceOrders);
     }
 }

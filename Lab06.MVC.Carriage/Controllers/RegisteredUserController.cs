@@ -43,6 +43,13 @@ namespace Lab06.MVC.Carriage.Controllers
             return View(allTripsVm);
         }
 
+        public ActionResult Orders()
+        {
+            var orders = userService.GetOrders(User.Identity.GetUserId());
+            var mappedOrders = mapper.Map<IEnumerable<OrderModel>, List<OrderViewModel>>(orders);
+            return View(mappedOrders);
+        }
+
         public ActionResult CreateOrder(int tripId)
         {
             var trip = userService.GetTripById(tripId);

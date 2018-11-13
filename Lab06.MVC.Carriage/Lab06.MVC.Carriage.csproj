@@ -244,6 +244,7 @@
     <Content Include="Views\Shared\_ErrorSmallWindow.cshtml" />
     <Content Include="Views\Home\Error.cshtml" />
     <Content Include="Views\Home\HandleException.cshtml" />
+    <Content Include="Views\RegisteredUser\Orders.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

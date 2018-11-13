@@ -30,6 +30,7 @@ namespace Lab06.MVC.Carriage.ModelBuilders
             var directory = new DirectoryInfo(pathToPictures);
             var files = directory.GetFiles();
             List<string> picturesPathes = new List<string>();
+
             foreach (var file in files)
             {
                 picturesPathes.Add(Path.Combine(file.Directory.Name, file.Name));
@@ -67,7 +68,7 @@ namespace Lab06.MVC.Carriage.ModelBuilders
             };
         }
 
-        public RoutesViewModel BuildValidRoutesViewModel(IEnumerable<RouteModel> routeModels)
+        public RoutesViewModel BuildValidViewModel(IEnumerable<RouteModel> routeModels)
         {
             var routeVMs = mapper.Map<IEnumerable<RouteModel>, List<RouteViewModel>>(routeModels);
 
@@ -77,13 +78,13 @@ namespace Lab06.MVC.Carriage.ModelBuilders
             };
         }
 
-        public void RebuildNewInvalidRoutesViewModel(RoutesViewModel validModel, RouteViewModel wrongInputModel)
+        public void RebuildNewInvalidViewModel(RoutesViewModel validModel, RouteViewModel wrongInputModel)
         {
             wrongInputModel.HtmlFormatting = " colorforerror";
             validModel.WrongInputRouteViewModel = wrongInputModel;
         }
 
-        public void RebuildOldItemsInvalidRoutesViewModel(RoutesViewModel validModel, RouteViewModel wrongOldModel)
+        public void RebuildOldItemsInvalidViewModel(RoutesViewModel validModel, RouteViewModel wrongOldModel)
         {
             validModel.Routes.Where(x => x.RouteId == wrongOldModel.RouteId).ToList().ForEach(x =>
             {
@@ -94,32 +95,41 @@ namespace Lab06.MVC.Carriage.ModelBuilders
             });
         }
 
-        public TripModel BuildNewTripModel(TripViewModel trip)
+        public TripModel BuildTripModel(TripViewModel trip)
         {
             var tripModel = mapper.Map<TripViewModel, TripModel>(trip);
             tripModel.NumbersOfFreeSeats = Enumerable.Range(1, trip.FreeSeatNumber).ToList();
             return tripModel;
         }
 
-        public TripsViewModel BuildValidTripsViewModel(IEnumerable<TripModel> tripModels,
+        public TripsViewModel BuildValidViewModel(IEnumerable<TripModel> tripModels,
             IEnumerable<RouteModel> routeModels)
         {
             var tripVMs = mapper.Map<IEnumerable<TripModel>, List<TripViewModel>>(tripModels);
+            var routeVMs = mapper.Map<IEnumerable<RouteModel>, List<RouteViewModel>>(routeModels);
+
+            if (tripVMs.Any(x => x.Route == null))
+            {
+                foreach (var trip in tripVMs)
+                {
+                    trip.Route = routeVMs.FirstOrDefault(y => y.RouteId == trip.RouteId);
+                }
+            }
+
             return new TripsViewModel
             {
                 Trips = tripVMs,
-                Routes = mapper.Map<IEnumerable<RouteModel>,
-                    List<RouteViewModel>>(routeModels)
+                Routes = routeVMs
             };
         }
 
-        public void RebuildNewInvalidTripsViewModel(TripsViewModel validModel, TripViewModel wrongInputModel)
+        public void RebuildNewInvalidViewModel(TripsViewModel validModel, TripViewModel wrongInputModel)
         {
             wrongInputModel.HtmlFormatting = " colorforerror";
             validModel.WrongInputTripViewModel = wrongInputModel;
         }
 
-        public void RebuildOldItemsInvalidTripsViewModel(TripsViewModel validModel, TripViewModel wrongOldModel)
+        public void RebuildOldItemsInvalidViewModel(TripsViewModel validModel, TripViewModel wrongOldModel)
         {
             validModel.Trips.Where(x => x.TripId == wrongOldModel.TripId).ToList().ForEach(x =>
             {
