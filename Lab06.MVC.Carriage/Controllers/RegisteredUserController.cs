@@ -37,6 +37,12 @@ namespace Lab06.MVC.Carriage.Controllers
             return mapper.Map<IEnumerable<TripModel>, List<TripViewModel>>(tripModels);
         }
 
+        private OrderViewModel GetOrder(int orderId)
+        {
+            var order = userService.GetOrderById(orderId);
+            return mapper.Map<OrderModel, OrderViewModel>(order);
+        }
+
         public ActionResult Trips()
         {
             var allTripsVm = GetAllTrips();
@@ -69,14 +75,49 @@ namespace Lab06.MVC.Carriage.Controllers
                 if (result)
                 {
                     var trip = userService.GetTripById(order.TripId);
-                    TempData["message"] = $"Ticket to trip {trip.Route.CityDepart}-{trip.Route.CityArr}" +
-                                          $" was booked. Your seat number is {order.SeatNumber}";
+
+                    if (order.OrderId == 0)
+                    {
+                        TempData["message"] = $"Ticket to trip {trip.Route.CityDepart}-{trip.Route.CityArr}" +
+                                              $" was booked. Your seat number is {order.SeatNumber}";
+                    }
+                    else
+                    {
+                        TempData["message"] = $"Your seat number is changed on {order.SeatNumber}";
+                    }
                 }
 
                 return RedirectToAction("Trips");
             }
 
             return View(order);
+        }
+
+        public ActionResult EditOrder(int orderId)
+        {
+            var order = GetOrder(orderId);
+            return View(order);
+        }
+
+        public ActionResult DetailsOrder(int orderId)
+        {
+            var order = GetOrder(orderId);
+           
+            return View(order);
+        }
+
+        public ActionResult DeleteOrder(int orderId)
+        {
+            var result = userService.DeleteOrder(orderId);
+
+            if (result)
+            {
+                TempData["message"] = $"Your order with Id {orderId} was deleted";
+            }
+
+            var orders = userService.GetOrders(User.Identity.GetUserId());
+            var mappedOrders = mapper.Map<IEnumerable<OrderModel>, List<OrderViewModel>>(orders);
+            return View("Orders", mappedOrders);
         }
 
         public PartialViewResult RenderHelloUser()

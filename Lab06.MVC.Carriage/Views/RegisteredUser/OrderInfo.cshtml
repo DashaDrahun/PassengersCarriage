@@ -1,0 +1,64 @@
+﻿@model Lab06.MVC.Carriage.Models.OrderViewModel
+
+
+    <div class="col-md-3 offset-3">
+        <dl class="dl-horizontal">
+            <dt style="text-align: center">
+                @Html.HiddenFor(x => x.TripId)
+                @Html.HiddenFor(x => x.OrderId)
+            </dt>
+            <dt>
+                @Html.DisplayNameFor(model => model.Trip.Route.CityDepart)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Trip.Route.CityDepart)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Trip.Route.CityArr)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Trip.Route.CityArr)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Trip.DepartureTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Trip.DepartureTime)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Trip.DepartureDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Trip.DepartureDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Trip.ArrivalTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Trip.ArrivalTime)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Trip.ArrivalDate)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Trip.ArrivalDate)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Trip.Price)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Trip.Price)
+            </dd>
+            @*<dt>
+                @Html.DisplayNameFor(model => model.SeatNumber)
+            </dt>
+            <dd id = "seatNumber">
+                @Html.DisplayFor(model => model.SeatNumber)
+            </dd>*@
+            @*<dt>
+                @Html.LabelFor(model => model.SeatNumber)
+                @Html.TextBoxFor(model => model.SeatNumber, htmlAttributes: new {@class = "form-control", @readonly = "true", @id = "seatNumber"})
+                @Html.ValidationMessageFor(model => model.SeatNumber, "", new {@class = "text-danger"})
+            </dt>*@
+        </dl>
+    </div>

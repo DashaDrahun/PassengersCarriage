@@ -5,6 +5,8 @@ namespace Lab06.MVC.Carriage.Models
 {
     public class OrderViewModel
     {
+        public int OrderId { get; set; }
+
         [HiddenInput(DisplayValue = false)]
         public int TripId { get; set; }
 

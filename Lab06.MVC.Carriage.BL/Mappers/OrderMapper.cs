@@ -38,6 +38,11 @@ namespace Lab06.MVC.Carriage.BL.Mappers
             return mapper.Map<OrderModel, Order>(sourceModel);
         }
 
+        public OrderModel MapModel(Order sourceModel)
+        {
+            return mapper.Map<Order, OrderModel>(sourceModel);
+        }
+
         public IEnumerable<OrderModel> MapCollectionModels(IEnumerable<Order> sourceOrders)
         {
             return mapper.Map<IEnumerable<Order>, IEnumerable<OrderModel>>(sourceOrders);

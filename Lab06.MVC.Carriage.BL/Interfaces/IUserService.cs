@@ -10,5 +10,7 @@ namespace Lab06.MVC.Carriage.BL.Interfaces
         TripModel GetTripById(int tripId);
         bool SaveOrder(OrderModel orderModel);
         IEnumerable<OrderModel> GetOrders(string userId);
+        OrderModel GetOrderById(int orderId);
+        bool DeleteOrder(int orderId);
     }
 }

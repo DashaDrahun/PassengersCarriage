@@ -1,0 +1,32 @@
+﻿@model Lab06.MVC.Carriage.Models.OrderViewModel
+
+@{
+    ViewBag.Title = "Book ticket";
+    Layout = "~/Views/Shared/_RegisteredUsersLayoutPage.cshtml";
+}
+
+<h4 align="center">Information about ticket</h4>
+<hr />
+<div class="row">
+    @Html.Partial("OrderInfo", Model)
+</div>
+<div class="col-md-6">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                @Html.LabelFor(model => model.SeatNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(model => model.SeatNumber, htmlAttributes: new { @class = "form-control", @readonly = "true", @id = "seatNumber" })
+                    @Html.ValidationMessageFor(model => model.SeatNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-2 offset-3">
+        <div class="form-group">
+            @Html.ActionLink("Back", Request.UrlReferrer.Segments.Last(), null, new { @class = "btn btn-secondary", role = "button" })
+            </div>
+    </div>
+</div>

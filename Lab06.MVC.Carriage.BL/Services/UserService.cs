@@ -43,6 +43,20 @@ namespace Lab06.MVC.Carriage.BL.Services
             return tripMapper.MapModel(tripRepository.GetById(tripId));
         }
 
+        public OrderModel GetOrderById(int orderId)
+        {
+            return orderMapper.MapModel(orderRepository.GetById(orderId));
+        }
+
+        public bool DeleteOrder(int orderId)
+        {
+            var order = orderRepository.GetById(orderId);
+            orderRepository.Delete(order);
+            PushBackSeatNumberToListOfNumbers(tripRepository.GetById(order.TripId), order.SeatNumber);
+            unitOfWork.Save();
+            return true;
+        }
+
         public IEnumerable<TripModel> GetAllTrips()
         {
             var trips = tripMapper.MapCollectionModels(tripRepository.GetAll());
@@ -56,9 +70,16 @@ namespace Lab06.MVC.Carriage.BL.Services
 
         public bool SaveOrder(OrderModel orderModel)
         {
+            if (orderModel.OrderId != 0)
+            {
+                var oldOrder = orderRepository.GetById(orderModel.OrderId);
+                PushBackSeatNumberToListOfNumbers(oldOrder.Trip, oldOrder.SeatNumber);
+            }
+
+            DecreaseSeatNumbersForTrip(tripRepository.GetById(orderModel.TripId), orderModel.SeatNumber);
             var order = orderMapper.MapEntity(orderModel);
             orderRepository.Update(order);
-            DecreaseSeatNumbersForTrip(tripRepository.GetById(orderModel.TripId), orderModel.SeatNumber);
+
             unitOfWork.Save();
 
             return true;
@@ -75,6 +96,17 @@ namespace Lab06.MVC.Carriage.BL.Services
             trip.FreeSeetsNumbers = freeSeatsArrayUpdated.Remove(seatNumber) 
                 ? String.Join(" ", freeSeatsArrayUpdated.Select(x => x.ToString())) 
                 : throw new PassengersCarriageValidationException($"Seat № {seatNumber} not found in trip № {trip.TripId}");
+            tripRepository.Update(trip);
+
+            return true;
+        }
+
+        private bool PushBackSeatNumberToListOfNumbers(Trip trip, int seatNumber)
+        {
+            var freeSeatsArrayUpdated = !String.IsNullOrEmpty(trip.FreeSeetsNumbers) ? trip.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x)).ToList() : new List<int>();
+            freeSeatsArrayUpdated.Add(seatNumber);
+            freeSeatsArrayUpdated.Sort();
+            trip.FreeSeetsNumbers = String.Join(" ", freeSeatsArrayUpdated.Select(x => x.ToString()));
             tripRepository.Update(trip);
 
             return true;

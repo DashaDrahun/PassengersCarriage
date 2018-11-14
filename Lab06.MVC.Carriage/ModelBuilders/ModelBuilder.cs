@@ -58,10 +58,25 @@ namespace Lab06.MVC.Carriage.ModelBuilders
             };
         }
 
+        //public OrderViewModel BuilOrderViewModel(OrderViewModel order)
+        //{
+        //    order.Trip = mapper.Map<TripModel, TripViewModel>(order.Trip)
+        //    return new OrderViewModel
+        //    {
+        //        TripId = order.TripId,
+        //        OrderId = order.OrderId,
+        //        Trip = mapper.Map<TripModel, TripViewModel>(order.),
+        //        SeatNumber = trip.NumbersOfFreeSeats.Count > 0
+        //            ? trip.NumbersOfFreeSeats.First()
+        //            : throw new PassengersCarriageValidationException($"No free seats for trip with id {trip.TripId}")
+        //    };
+        //}
+
         public OrderModel BuildOrderModel(OrderViewModel order, string userId)
         {
             return new OrderModel
             {
+                OrderId = order.OrderId,
                 TripId = order.TripId,
                 SeatNumber = order.SeatNumber,
                 UserId = userId
