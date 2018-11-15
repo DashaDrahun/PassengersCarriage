@@ -20,25 +20,25 @@
         <thead>
             <tr>
                 <th>
-                    Route
+                    @Html.DisplayNameFor(model => model.Route)
                 </th>
                 <th>
-                    Departure Date
+                    @Html.DisplayNameFor(model => model.DepartureDate)
                 </th>
                 <th>
-                    Departure Time
+                    @Html.DisplayNameFor(model => model.DepartureTime)
                 </th>
                 <th>
-                    Arrival Date
+                    @Html.DisplayNameFor(model => model.ArrivalDate)
                 </th>
                 <th>
-                    Arrival Time
+                    @Html.DisplayNameFor(model => model.ArrivalTime)
                 </th>
                 <th>
-                    FreeSeetsNumber
+                    @Html.DisplayNameFor(model => model.FreeSeatNumber)
                 </th>
                 <th>
-                    Price
+                    @Html.DisplayNameFor(model => model.Price)
                 </th>
             </tr>
         </thead>
@@ -54,7 +54,7 @@
                     <td>@item.FreeSeatNumber</td>
                     <td>@item.Price</td>
                     <td>
-                        <input type="button" class="btn btn-success" value="Buy ticket!" onclick="location.href='@Url.Action("CreateOrder", "RegisteredUser" ,new { tripId = item.TripId })'" />
+                        <input type="button" class="btn btn-success" value="Buy ticket!" onclick="location.href='@Url.Action("CreateOrder", "RegisteredUser" ,new { tripId = item.Id })'" />
                     </td>
                 </tr>
             }

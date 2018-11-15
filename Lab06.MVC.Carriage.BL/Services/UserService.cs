@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
-using Lab06.MVC.Carriage.BL.Mappers;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.DAL.Entities;
 using Lab06.MVC.Carriage.DAL.Interfaces;
@@ -16,11 +15,11 @@ namespace Lab06.MVC.Carriage.BL.Services
         private readonly IRepository<Trip> tripRepository;
         private readonly IRepository<Route> routeRepository;
         private readonly IRepository<Order> orderRepository;
-        private readonly ITripMapper tripMapper;
-        private readonly IRouteMapper routeMapper;
-        private readonly IOrderMapper orderMapper;
+        private readonly IWrapMapper<TripModel, Trip> tripMapper;
+        private readonly IWrapMapper<RouteModel, Route> routeMapper;
+        private readonly IWrapMapper<OrderModel, Order> orderMapper;
 
-        public UserService(IUnitOfWork unitOfWork, ITripMapper tripMapper, IRouteMapper routeMapper, IOrderMapper orderMapper)
+        public UserService(IUnitOfWork unitOfWork, IWrapMapper<TripModel, Trip> tripMapper, IWrapMapper<RouteModel, Route> routeMapper, IWrapMapper<OrderModel, Order> orderMapper)
         {
             this.unitOfWork = unitOfWork
                 ?? throw new ArgumentNullException(nameof(unitOfWork));
@@ -48,13 +47,13 @@ namespace Lab06.MVC.Carriage.BL.Services
             return orderMapper.MapModel(orderRepository.GetById(orderId));
         }
 
-        public bool DeleteOrder(int orderId)
+        public OperationDetails DeleteOrder(int orderId)
         {
-            var order = orderRepository.GetById(orderId);
-            orderRepository.Delete(order);
-            PushBackSeatNumberToListOfNumbers(tripRepository.GetById(order.TripId), order.SeatNumber);
+            var order = orderRepository.Delete(orderRepository.GetById(orderId));
+            AttachSeatNumberToTrip(tripRepository.GetById(order.TripId), order.SeatNumber);
             unitOfWork.Save();
-            return true;
+
+            return new OperationDetails(true, $"Order with id {order.Id} was successfully deleted", "");
         }
 
         public IEnumerable<TripModel> GetAllTrips()
@@ -68,21 +67,30 @@ namespace Lab06.MVC.Carriage.BL.Services
             return routeMapper.MapCollectionModels(routeRepository.GetAll().ToList());
         }
 
-        public bool SaveOrder(OrderModel orderModel)
+        public OperationDetails SaveOrder(OrderModel orderModel)
         {
-            if (orderModel.OrderId != 0)
+            var userMessage = "";
+            var view = "";
+
+            if (orderModel.Id != 0)
             {
-                var oldOrder = orderRepository.GetById(orderModel.OrderId);
-                PushBackSeatNumberToListOfNumbers(oldOrder.Trip, oldOrder.SeatNumber);
+                var oldOrder = orderRepository.GetById(orderModel.Id);
+                AttachSeatNumberToTrip(oldOrder.Trip, oldOrder.SeatNumber);
+                userMessage = !(orderModel.SeatNumber == oldOrder.SeatNumber)
+                    ? $"Order with id {orderModel.Id} was successfully updated." +
+                              $"Your seat number is changed from {oldOrder.SeatNumber} on {orderModel.SeatNumber}"
+                                    : $"Your seat number is stayed the same: {oldOrder.SeatNumber}";
+                view = "Orders";
             }
 
-            DecreaseSeatNumbersForTrip(tripRepository.GetById(orderModel.TripId), orderModel.SeatNumber);
-            var order = orderMapper.MapEntity(orderModel);
-            orderRepository.Update(order);
-
+            DetachSeatNumberFromTrip(tripRepository.GetById(orderModel.TripId), orderModel.SeatNumber);
+            orderRepository.Update(orderMapper.MapEntity(orderModel));
             unitOfWork.Save();
 
-            return true;
+            return new OperationDetails(true,
+                String.IsNullOrEmpty(userMessage) ? $"Order was successfully created. " +
+                                                    $"Your seat number is {orderModel.SeatNumber}"
+                    : userMessage, String.IsNullOrEmpty(view) ? "Trips" : view);
         }
 
         public IEnumerable<OrderModel> GetOrders(string userId)
@@ -90,26 +98,24 @@ namespace Lab06.MVC.Carriage.BL.Services
             return orderMapper.MapCollectionModels(orderRepository.Get(x => x.UserId == userId));
         }
 
-        private bool DecreaseSeatNumbersForTrip(Trip trip, int seatNumber)
+        private void DetachSeatNumberFromTrip(Trip trip, int seatNumber)
         {
-            var freeSeatsArrayUpdated = trip.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x)).ToList();
-            trip.FreeSeetsNumbers = freeSeatsArrayUpdated.Remove(seatNumber) 
-                ? String.Join(" ", freeSeatsArrayUpdated.Select(x => x.ToString())) 
-                : throw new PassengersCarriageValidationException($"Seat № {seatNumber} not found in trip № {trip.TripId}");
+            var seatsArray = trip.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x)).ToList();
+            trip.FreeSeetsNumbers = seatsArray.Remove(seatNumber)
+                ? String.Join(" ", seatsArray.Select(x => x.ToString()))
+                : throw new PassengersCarriageValidationException($"Seat № {seatNumber} not found in trip № {trip.Id}");
             tripRepository.Update(trip);
-
-            return true;
         }
 
-        private bool PushBackSeatNumberToListOfNumbers(Trip trip, int seatNumber)
+        private void AttachSeatNumberToTrip(Trip trip, int seatNumber)
         {
-            var freeSeatsArrayUpdated = !String.IsNullOrEmpty(trip.FreeSeetsNumbers) ? trip.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x)).ToList() : new List<int>();
-            freeSeatsArrayUpdated.Add(seatNumber);
-            freeSeatsArrayUpdated.Sort();
-            trip.FreeSeetsNumbers = String.Join(" ", freeSeatsArrayUpdated.Select(x => x.ToString()));
+            var seatsArray = !String.IsNullOrEmpty(trip.FreeSeetsNumbers)
+                ? trip.FreeSeetsNumbers.Split(' ').Select(x => Int32.Parse(x)).ToList()
+                : new List<int>();
+            seatsArray.Add(seatNumber);
+            seatsArray.Sort();
+            trip.FreeSeetsNumbers = String.Join(" ", seatsArray.Select(x => x.ToString()));
             tripRepository.Update(trip);
-
-            return true;
         }
     }
 }

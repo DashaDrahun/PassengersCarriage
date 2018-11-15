@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
-using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.BL.Model;
-using Lab06.MVC.Carriage.DAL.Entities;
 using Lab06.MVC.Carriage.ModelBuilders;
 using Lab06.MVC.Carriage.Models;
 using Microsoft.AspNet.Identity;
@@ -34,25 +31,29 @@ namespace Lab06.MVC.Carriage.Controllers
         private List<TripViewModel> GetAllTrips()
         {
             IEnumerable<TripModel> tripModels = userService.GetAllTrips();
+
             return mapper.Map<IEnumerable<TripModel>, List<TripViewModel>>(tripModels);
         }
 
         private OrderViewModel GetOrder(int orderId)
         {
             var order = userService.GetOrderById(orderId);
+
             return mapper.Map<OrderModel, OrderViewModel>(order);
         }
 
         public ActionResult Trips()
         {
-            var allTripsVm = GetAllTrips();
-            return View(allTripsVm);
+            var model = GetAllTrips();
+
+            return View(model);
         }
 
         public ActionResult Orders()
         {
             var orders = userService.GetOrders(User.Identity.GetUserId());
             var mappedOrders = mapper.Map<IEnumerable<OrderModel>, List<OrderViewModel>>(orders);
+
             return View(mappedOrders);
         }
 
@@ -71,23 +72,9 @@ namespace Lab06.MVC.Carriage.Controllers
             {
                 var orderModel = modelBuilder.BuildOrderModel(order, User.Identity.GetUserId());
                 var result = userService.SaveOrder(orderModel);
+                TempData["message"] = result.Message;
 
-                if (result)
-                {
-                    var trip = userService.GetTripById(order.TripId);
-
-                    if (order.OrderId == 0)
-                    {
-                        TempData["message"] = $"Ticket to trip {trip.Route.CityDepart}-{trip.Route.CityArr}" +
-                                              $" was booked. Your seat number is {order.SeatNumber}";
-                    }
-                    else
-                    {
-                        TempData["message"] = $"Your seat number is changed on {order.SeatNumber}";
-                    }
-                }
-
-                return RedirectToAction("Trips");
+                return RedirectToAction(result.Property);
             }
 
             return View(order);
@@ -96,6 +83,7 @@ namespace Lab06.MVC.Carriage.Controllers
         public ActionResult EditOrder(int orderId)
         {
             var order = GetOrder(orderId);
+
             return View(order);
         }
 
@@ -109,20 +97,16 @@ namespace Lab06.MVC.Carriage.Controllers
         public ActionResult DeleteOrder(int orderId)
         {
             var result = userService.DeleteOrder(orderId);
+            TempData["message"] = result.Message;
+            var orders = mapper.Map<IEnumerable<OrderModel>, List<OrderViewModel>>(userService.GetOrders(User.Identity.GetUserId()));
 
-            if (result)
-            {
-                TempData["message"] = $"Your order with Id {orderId} was deleted";
-            }
-
-            var orders = userService.GetOrders(User.Identity.GetUserId());
-            var mappedOrders = mapper.Map<IEnumerable<OrderModel>, List<OrderViewModel>>(orders);
-            return View("Orders", mappedOrders);
+            return View("Orders", orders);
         }
 
         public PartialViewResult RenderHelloUser()
         {
             var userName = User.Identity;
+
             return PartialView("_RenderHelloUser", userName);
         }
     }

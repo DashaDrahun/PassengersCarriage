@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Net;
 using System.Web.Mvc;
-using AutoMapper;
-using Lab06.MVC.Carriage.BL.Interfaces;
-using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.ModelBuilders;
 using Lab06.MVC.Carriage.Models;
 
@@ -58,7 +53,7 @@ namespace Lab06.MVC.Carriage.Controllers
 
         public ActionResult Index()
         {
-            var model = modelBuilder.Build();
+            var model = modelBuilder.BuildPictureCarousel();
 
             return View(model);
         }

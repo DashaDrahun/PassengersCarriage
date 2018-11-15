@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lab06.MVC.Carriage.DAL.Interfaces;
 
 namespace Lab06.MVC.Carriage.DAL.Entities
 {
-    public class Trip
+    public class Trip: IEntity
     {
-        public int TripId { get; set; }
+        public int Id { get; set; }
 
         public int RouteId { get; set; }
 

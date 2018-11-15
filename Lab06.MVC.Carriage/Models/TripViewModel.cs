@@ -13,7 +13,7 @@ namespace Lab06.MVC.Carriage.Models
     {
         [CombinedTripValidation("DepartureDate", "DepartureTime", "ArrivalDate", "ArrivalTime")]
         [HiddenInput(DisplayValue = false)]
-        public int TripId { get; set; }
+        public int Id { get; set; }
 
         [HiddenInput(DisplayValue = false)]
         public int RouteId { get; set; }

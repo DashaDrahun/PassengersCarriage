@@ -211,8 +211,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Attributes\CityValidationAttribute.cs" />
     <Compile Include="Attributes\CombinedTripValidationAttribute.cs" />
-    <Compile Include="ViewModels\Admin\RoutesViewModel.cs" />
-    <Compile Include="ViewModels\Admin\TripsViewModel.cs" />
+    <Compile Include="Models\Admin\RoutesViewModel.cs" />
+    <Compile Include="Models\Admin\TripsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

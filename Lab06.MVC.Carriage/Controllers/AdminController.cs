@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using AutoMapper;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
-using Lab06.MVC.Carriage.DAL.Entities;
 using Lab06.MVC.Carriage.ModelBuilders;
 using Lab06.MVC.Carriage.Models;
-using Lab06.MVC.Carriage.ViewModelsForViews.Admin;
+using Lab06.MVC.Carriage.Models.Admin;
 
 namespace Lab06.MVC.Carriage.Controllers
 {
@@ -48,112 +46,128 @@ namespace Lab06.MVC.Carriage.Controllers
         [HttpPost]
         public ActionResult RoutesWork(RouteViewModel routeVm, string submitButton)
         {
+            RoutesViewModel model;
+
             if (ModelState.IsValid)
             {
                 var routeModel = mapper.Map<RouteViewModel, RouteModel>(routeVm);
+                var userMessage = "";
+
                 try
                 {
                     switch (submitButton)
                     {
                         case "Create":
-                            adminService.CreateRoute(routeModel);
+                            userMessage = adminService.CreateRoute(routeModel).Message;
                             break;
                         case "Update":
-                            adminService.UpdateRoute(routeModel);
+                            userMessage = adminService.UpdateRoute(routeModel).Message;
                             break;
                         case "Delete":
-                            adminService.DeleteRoute(routeModel);
+                            userMessage = adminService.DeleteRoute(routeModel).Message;
                             break;
                         default:
                             throw new NotSupportedException();
                     }
+                    TempData["message"] = userMessage;
                 }
                 catch (PassengersCarriageValidationException e)
                 {
                     ModelState.AddModelError(String.Empty, e.Message);
                 }
+
+                model = GetAllRoutes();
             }
 
-            var allRoutesVm = GetAllRoutes();
-
-            if (!ModelState.IsValid)
+            else
             {
-                if (routeVm.RouteId == 0)
+                model = GetAllRoutes();
+
+                if (routeVm.Id == 0)
                 {
-                    modelBuilder.RebuildNewInvalidViewModel(allRoutesVm, routeVm);
+                    modelBuilder.RebuildNewInvalidViewModel(model, routeVm);
                 }
                 else
                 {
-                    modelBuilder.RebuildOldItemsInvalidViewModel(allRoutesVm, routeVm);
+                    modelBuilder.RebuildOldItemsInvalidViewModel(model, routeVm);
                 }
             }
 
-            return View(allRoutesVm);
+            return View(model);
         }
 
         [HttpPost]
         public ActionResult TripsWork(TripViewModel tripVm, string submitButton)
         {
+            TripsViewModel model;
+
             if (ModelState.IsValid)
             {
                 var tripModel = modelBuilder.BuildTripModel(tripVm);
+                var userMessage = "";
 
                 try
                 {
                     switch (submitButton)
                     {
                         case "Create":
-                            adminService.CreateTrip(tripModel);
+                            userMessage = adminService.CreateTrip(tripModel).Message;
                             break;
                         case "Update":
-                            adminService.UpdateTrip(tripModel);
+                            userMessage = adminService.UpdateTrip(tripModel).Message;
                             break;
                         case "Delete":
-                            adminService.DeleteTrip(tripModel);
+                            userMessage = adminService.DeleteTrip(tripModel).Message;
                             break;
                         default:
                             throw new NotSupportedException();
                     }
+                    TempData["message"] = userMessage;
                 }
                 catch (PassengersCarriageValidationException e)
                 {
                     ModelState.AddModelError(String.Empty, e.Message);
                 }
+
+                model = GetAllTrips();
             }
-
-            var allTripsVm = GetAllTrips();
-
-            if (!ModelState.IsValid)
+            else
             {
-                if (tripVm.TripId == 0)
+                model = GetAllTrips();
+
+                if (tripVm.Id == 0)
                 {
-                    modelBuilder.RebuildNewInvalidViewModel(allTripsVm, tripVm);
+                    modelBuilder.RebuildNewInvalidViewModel(model, tripVm);
                 }
                 else
                 {
-                    modelBuilder.RebuildOldItemsInvalidViewModel(allTripsVm, tripVm);
+                    modelBuilder.RebuildOldItemsInvalidViewModel(model, tripVm);
                 }
             }
-            return View(allTripsVm);
+
+            return View(model);
         }
 
         [HttpGet]
         public ActionResult RoutesWork()
         {
-            var allRoutesVm = GetAllRoutes();
-            return View(allRoutesVm);
+            var model = GetAllRoutes();
+
+            return View(model);
         }
 
         [HttpGet]
         public ActionResult TripsWork()
         {
-            var allTripsVm = GetAllTrips();
-            return View(allTripsVm);
+            var model = GetAllTrips();
+
+            return View(model);
         }
 
         public PartialViewResult RenderHelloUser()
         {
             var user = User.Identity;
+
             return PartialView("_RenderHelloUser", user);
         }
     }

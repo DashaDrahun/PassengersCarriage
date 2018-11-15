@@ -1,17 +1,13 @@
 ﻿using Lab06.MVC.Carriage.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Lab06.MVC.Carriage.BL.Model;
-using Lab06.MVC.Carriage.ViewModelsForViews.Admin;
+using Lab06.MVC.Carriage.Models.Admin;
 
 namespace Lab06.MVC.Carriage.ModelBuilders
 {
     public interface IModelBuilder
     {
-        HomeIndexViewModel Build();
+        HomeIndexViewModel BuildPictureCarousel();
         OrderViewModel BuilOrderViewModel(TripModel trip);
         OrderModel BuildOrderModel(OrderViewModel order, string userId);
         RoutesViewModel BuildValidViewModel(IEnumerable<RouteModel> routeModels);

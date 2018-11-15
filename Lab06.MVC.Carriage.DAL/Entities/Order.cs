@@ -1,8 +1,10 @@
-﻿namespace Lab06.MVC.Carriage.DAL.Entities
+﻿using Lab06.MVC.Carriage.DAL.Interfaces;
+
+namespace Lab06.MVC.Carriage.DAL.Entities
 {
-    public class Order
+    public class Order: IEntity
     {
-        public int OrderId { get; set; }
+        public int Id { get; set; }
 
         public int TripId { get; set; }
 

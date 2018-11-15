@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Lab06.MVC.Carriage.BL.Infrastructure;
+using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.DAL.Entities;
 
 namespace Lab06.MVC.Carriage.BL.Mappers
 {
-    public class TripMapper: ITripMapper
+    public class TripMapper: IWrapMapper<TripModel, Trip>
     {
         private readonly IMapper mapper;
 

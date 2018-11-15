@@ -1,5 +1,5 @@
 ﻿@using Lab06.MVC.Carriage.Models
-@model Lab06.MVC.Carriage.ViewModelsForViews.Admin.TripsViewModel
+@model Lab06.MVC.Carriage.Models.Admin.TripsViewModel
 
 @{
     ViewBag.Title = "TripsWork";
@@ -16,13 +16,13 @@
 
 <table class="table">
     <tr>
-        <th>Route</th>
-        <th>Departure Date</th>
-        <th>Departure Time</th>
-        <th>Arrival Date</th>
-        <th>Arrival Time</th>
-        <th>Free Seet Number</th>
-        <th>Price</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputTripViewModel.Route)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputTripViewModel.DepartureDate)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputTripViewModel.DepartureTime)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputTripViewModel.ArrivalDate)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputTripViewModel.ArrivalTime)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputTripViewModel.FreeSeatNumber)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputTripViewModel.Price)</th>
     </tr>
     <tr>
         @using (Html.BeginForm())
@@ -32,12 +32,12 @@
                     <select name="RouteId" class="form-control" onclick="removeErrorStyle(this)">
                         @foreach (var route in Model.Routes)
                         {
-                            <option value="@route.RouteId">@string.Concat(route.CityDepart, " → ", route.CityArr)</option>
+                            <option value="@route.Id">@string.Concat(route.CityDepart, " → ", route.CityArr)</option>
                         }
                     </select>
                 </div>
             </td>
-            @Html.Partial("Trip", Model.WrongInputTripViewModel ?? new TripViewModel() { ArrivalDate = DateTime.Now, DepartureDate = DateTime.Now, ArrivalTime = DateTime.Now.AddHours(1), DepartureTime = DateTime.Now})
+            @Html.Partial("Trip", Model.WrongInputTripViewModel ?? new TripViewModel() { ArrivalDate = DateTime.Now, DepartureDate = DateTime.Now, ArrivalTime = DateTime.Now.AddHours(2), DepartureTime = DateTime.Now.AddHours(1) })
             <td>
                 <input class="btn btn-primary" type="submit" name="submitButton" value="Create" />
             </td>
@@ -54,7 +54,7 @@
                     <td>
                         <div class="form-group">
                             <input type="text" readonly="readonly" value="@string.Concat(item.Route.CityDepart, " ->> ", item.Route.CityArr)" class="form-control @item.HtmlFormatting" />
-                            <input type="hidden" name="TripId" value="@item.TripId" class="form-control" />
+                            <input type="hidden" name="Id" value="@item.Id" class="form-control" />
                             <input type="hidden" name="RouteId" value="@item.RouteId" class="form-control" />
                         </div>
                     </td>

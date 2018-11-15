@@ -7,7 +7,7 @@ using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.Models;
 using Lab06.MVC.Carriage.BL.Model;
-using Lab06.MVC.Carriage.ViewModelsForViews.Admin;
+using Lab06.MVC.Carriage.Models.Admin;
 
 namespace Lab06.MVC.Carriage.ModelBuilders
 {
@@ -24,7 +24,7 @@ namespace Lab06.MVC.Carriage.ModelBuilders
                           ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public HomeIndexViewModel Build()
+        public HomeIndexViewModel BuildPictureCarousel()
         {
             string pathToPictures = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images"));
             var directory = new DirectoryInfo(pathToPictures);
@@ -50,33 +50,19 @@ namespace Lab06.MVC.Carriage.ModelBuilders
         {
             return new OrderViewModel
             {
-                TripId = trip.TripId,
+                TripId = trip.Id,
                 Trip = mapper.Map<TripModel, TripViewModel>(trip),
                 SeatNumber = trip.NumbersOfFreeSeats.Count > 0
                     ? trip.NumbersOfFreeSeats.First()
-                    : throw new PassengersCarriageValidationException($"No free seats for trip with id {trip.TripId}")
+                    : throw new PassengersCarriageValidationException($"No free seats for trip with id {trip.Id}")
             };
         }
-
-        //public OrderViewModel BuilOrderViewModel(OrderViewModel order)
-        //{
-        //    order.Trip = mapper.Map<TripModel, TripViewModel>(order.Trip)
-        //    return new OrderViewModel
-        //    {
-        //        TripId = order.TripId,
-        //        OrderId = order.OrderId,
-        //        Trip = mapper.Map<TripModel, TripViewModel>(order.),
-        //        SeatNumber = trip.NumbersOfFreeSeats.Count > 0
-        //            ? trip.NumbersOfFreeSeats.First()
-        //            : throw new PassengersCarriageValidationException($"No free seats for trip with id {trip.TripId}")
-        //    };
-        //}
 
         public OrderModel BuildOrderModel(OrderViewModel order, string userId)
         {
             return new OrderModel
             {
-                OrderId = order.OrderId,
+                Id = order.Id,
                 TripId = order.TripId,
                 SeatNumber = order.SeatNumber,
                 UserId = userId
@@ -101,7 +87,7 @@ namespace Lab06.MVC.Carriage.ModelBuilders
 
         public void RebuildOldItemsInvalidViewModel(RoutesViewModel validModel, RouteViewModel wrongOldModel)
         {
-            validModel.Routes.Where(x => x.RouteId == wrongOldModel.RouteId).ToList().ForEach(x =>
+            validModel.Routes.Where(x => x.Id == wrongOldModel.Id).ToList().ForEach(x =>
             {
                 x.CityArr = wrongOldModel.CityArr;
                 x.CityDepart = wrongOldModel.CityDepart;
@@ -127,7 +113,7 @@ namespace Lab06.MVC.Carriage.ModelBuilders
             {
                 foreach (var trip in tripVMs)
                 {
-                    trip.Route = routeVMs.FirstOrDefault(y => y.RouteId == trip.RouteId);
+                    trip.Route = routeVMs.FirstOrDefault(y => y.Id == trip.RouteId);
                 }
             }
 
@@ -146,7 +132,7 @@ namespace Lab06.MVC.Carriage.ModelBuilders
 
         public void RebuildOldItemsInvalidViewModel(TripsViewModel validModel, TripViewModel wrongOldModel)
         {
-            validModel.Trips.Where(x => x.TripId == wrongOldModel.TripId).ToList().ForEach(x =>
+            validModel.Trips.Where(x => x.Id == wrongOldModel.Id).ToList().ForEach(x =>
             {
                 x.ArrivalDate = wrongOldModel.ArrivalDate;
                 x.ArrivalTime = wrongOldModel.ArrivalTime;

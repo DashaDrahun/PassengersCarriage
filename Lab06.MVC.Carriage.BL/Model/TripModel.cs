@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lab06.MVC.Carriage.BL.Interfaces;
 
 namespace Lab06.MVC.Carriage.BL.Model
 {
-    public class TripModel
+    public class TripModel: IModel
     {
-        public int TripId { get; set; }
+        public int Id { get; set; }
 
         public int RouteId { get; set; }
 

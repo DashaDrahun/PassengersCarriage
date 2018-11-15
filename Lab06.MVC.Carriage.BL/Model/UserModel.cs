@@ -2,6 +2,7 @@
 {
     public class UserModel
     {
+        // todo: не реализует IModel - скажется ли это на работе проги?
         public string Id { get; set; }
 
         public string Email { get; set; }

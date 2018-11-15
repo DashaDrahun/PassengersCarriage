@@ -1,8 +1,10 @@
-﻿namespace Lab06.MVC.Carriage.BL.Model
+﻿using Lab06.MVC.Carriage.BL.Interfaces;
+
+namespace Lab06.MVC.Carriage.BL.Model
 {
-    public class OrderModel
+    public class OrderModel: IModel
     {
-        public int OrderId { get; set; }
+        public int Id { get; set; }
 
         public int TripId { get; set; }
 

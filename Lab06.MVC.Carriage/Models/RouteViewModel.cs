@@ -9,7 +9,7 @@ namespace Lab06.MVC.Carriage.Models
     public class RouteViewModel
     {
         [HiddenInput(DisplayValue = false)]
-        public int RouteId { get; set; }
+        public int Id { get; set; }
 
         [Required]
         [Range(1, (int)BelarusInfo.MaxKmSpread, ErrorMessage = "Kilometres must be >= 1")]

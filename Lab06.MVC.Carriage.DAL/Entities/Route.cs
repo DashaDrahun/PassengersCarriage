@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using Lab06.MVC.Carriage.DAL.Interfaces;
 
 namespace Lab06.MVC.Carriage.DAL.Entities
 {
-    public class Route
+    public class Route: IEntity
     {
-        public int RouteId { get; set; }
+        public int Id { get; set; }
 
         public double Kilometres { get; set; }
 

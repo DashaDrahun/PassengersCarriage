@@ -56,9 +56,9 @@ namespace Lab06.MVC.Carriage.DAL.Repositories
             return orderBy != null ? orderBy(query).ToList() : query.ToList();
         }
 
-        public void Create(T item)
+        public T Create(T item)
         {
-            entities.Add(item);
+            return entities.Add(item);
         }
 
         public void Update(T item)
@@ -66,14 +66,14 @@ namespace Lab06.MVC.Carriage.DAL.Repositories
             context.Set<T>().AddOrUpdate(item);
         }
 
-        public void Delete(T item)
+        public T Delete(T item)
         {
             if (context.Entry(item).State == EntityState.Detached)
             {
                 entities.Attach(item);
             }
 
-            entities.Remove(item);
+            return entities.Remove(item);
         }
     }
 }

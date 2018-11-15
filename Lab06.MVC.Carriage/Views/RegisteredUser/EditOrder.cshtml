@@ -1,5 +1,4 @@
-﻿@using System.Diagnostics.Eventing.Reader
-@model Lab06.MVC.Carriage.Models.OrderViewModel
+﻿@model Lab06.MVC.Carriage.Models.OrderViewModel
 
 @{
     ViewBag.Title = "Book ticket";
@@ -55,6 +54,7 @@
                     }
                     @if (Model.Trip.NumbersOfFreeSeats.Count > 0)
                     {
+                        <div>Please choose a seat number</div> 
                         <div class="btn-group" role="group" aria-label="Basic example">
                             @foreach (var seat in Model.Trip.NumbersOfFreeSeats)
                             {
@@ -77,7 +77,6 @@
     <div class="row">
         <div class="col-md-2 offset-3">
             <div class="form-group">
-                @*<input type="button" class="btn btn-default" value="Back to trips!" onclick="location.href='@Url.Action("Trips", "RegisteredUser")'" />*@
                 @Html.ActionLink("Back", Request.UrlReferrer.Segments.Last(), null, new { @class = "btn btn-secondary", role = "button" })
             </div>
         </div>

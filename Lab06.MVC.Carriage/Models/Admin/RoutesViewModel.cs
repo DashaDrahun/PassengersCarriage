@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Lab06.MVC.Carriage.Models;
 
-namespace Lab06.MVC.Carriage.ViewModelsForViews.Admin
+namespace Lab06.MVC.Carriage.Models.Admin
 {
     public class RoutesViewModel
     {

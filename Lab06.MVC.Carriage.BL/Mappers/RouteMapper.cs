@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using AutoMapper;
-using Lab06.MVC.Carriage.BL.Infrastructure;
+using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.DAL.Entities;
 
 namespace Lab06.MVC.Carriage.BL.Mappers
 {
-    public class RouteMapper: IRouteMapper
+    public class RouteMapper: IWrapMapper<RouteModel, Route>
     {
         private readonly IMapper mapper;
 
@@ -19,8 +15,8 @@ namespace Lab06.MVC.Carriage.BL.Mappers
             mapper =
                 new MapperConfiguration(cfg =>
                     {
-                        cfg.CreateMap<Route, RouteModel>().IgnoreAllVirtual();
-                        cfg.CreateMap<RouteModel, Route>().IgnoreAllVirtual();
+                        cfg.CreateMap<Route, RouteModel>();
+                        cfg.CreateMap<RouteModel, Route>();
                     })
                     .CreateMapper();
         }

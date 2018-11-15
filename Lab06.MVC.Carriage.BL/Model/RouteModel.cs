@@ -1,8 +1,10 @@
-﻿namespace Lab06.MVC.Carriage.BL.Model
+﻿using Lab06.MVC.Carriage.BL.Interfaces;
+
+namespace Lab06.MVC.Carriage.BL.Model
 {
-    public class RouteModel
+    public class RouteModel: IModel
     {
-        public int RouteId { get; set; }
+        public int Id { get; set; }
 
         public double Kilometres { get; set; }
 

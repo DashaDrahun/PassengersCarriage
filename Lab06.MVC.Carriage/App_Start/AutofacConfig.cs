@@ -2,6 +2,7 @@
 using Autofac;
 using Lab06.MVC.Carriage.BL.Interfaces;
 using Lab06.MVC.Carriage.BL.Mappers;
+using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.BL.Services;
 using Lab06.MVC.Carriage.DAL.Context;
 using Lab06.MVC.Carriage.DAL.Entities;
@@ -39,16 +40,8 @@ namespace Lab06.MVC.Carriage
                 .As<IUnitOfWork>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<BaseRepository<Route>>()
-                .As<IRepository<Route>>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<BaseRepository<Trip>>()
-                .As<IRepository<Trip>>()
-                .InstancePerLifetimeScope();
-
-            builder.RegisterType<BaseRepository<Order>>()
-                .As<IRepository<Order>>()
+            builder.RegisterGeneric(typeof(BaseRepository<>))
+                .As(typeof(IRepository<>))
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<IdentityService>()
@@ -67,16 +60,16 @@ namespace Lab06.MVC.Carriage
                 .As<IModelBuilder>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<TripMapper>()
-                .As<ITripMapper>()
+            builder.RegisterType<RouteMapper>()
+                .As<IWrapMapper<RouteModel, Route>>()
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<RouteMapper>()
-                .As<IRouteMapper>()
+            builder.RegisterType<TripMapper>()
+                .As<IWrapMapper<TripModel, Trip>>()
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<OrderMapper>()
-                .As<IOrderMapper>()
+                .As<IWrapMapper<OrderModel, Order>>()
                 .InstancePerLifetimeScope();
         }
     }

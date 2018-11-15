@@ -13,12 +13,12 @@
     }
 }
 
-<h2>Orders</h2>
+<h2 style="text-align: center">Orders</h2>
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.OrderId)
+            @Html.DisplayNameFor(model => model.Id)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Trip.Route)
@@ -40,7 +40,7 @@
         <tr>
             <td>
                 @Html.HiddenFor(modelItem => item.TripId)
-                @Html.DisplayFor(modelitem => item.OrderId)
+                @Html.DisplayFor(modelitem => item.Id)
             </td>
             <td>
                 @string.Concat(item.Trip.Route.CityDepart, " → ", item.Trip.Route.CityArr)
@@ -55,9 +55,9 @@
                 @Html.DisplayFor(modelItem => item.SeatNumber)
             </td>
             <td>
-                @Html.ActionLink("Edit Seat", "EditOrder", new { orderId = item.OrderId }, new { @class = "btn btn-primary", role = "button" })
-                @Html.ActionLink("Details", "DetailsOrder", new { orderId = item.OrderId }, new { @class = "btn btn-info", role = "button" })
-                @Html.ActionLink("Delete", "DeleteOrder", new { orderId = item.OrderId }, new { @class = "btn btn-danger", role = "button" })
+                @Html.ActionLink("Edit Seat", "EditOrder", new { orderId = item.Id }, new { @class = "btn btn-primary", role = "button" })
+                @Html.ActionLink("Details", "DetailsOrder", new { orderId = item.Id }, new { @class = "btn btn-info", role = "button" })
+                @Html.ActionLink("Delete", "DeleteOrder", new { orderId = item.Id }, new { @class = "btn btn-danger", role = "button" })
             </td>
         </tr>
     }

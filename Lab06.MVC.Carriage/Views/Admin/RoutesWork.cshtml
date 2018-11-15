@@ -1,6 +1,5 @@
 ﻿@using Lab06.MVC.Carriage.Models
-@using Lab06.MVC.Carriage.ViewModelsForViews.Admin;
-@model RoutesViewModel
+@model Lab06.MVC.Carriage.Models.Admin.RoutesViewModel
 
 @{
     ViewBag.Title = "ShowRoutes";
@@ -18,9 +17,9 @@
 
 <table class="table">
     <tr>
-        <th>Departure City</th>
-        <th>Arrival City</th>
-        <th>Kilometres</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputRouteViewModel.CityDepart)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputRouteViewModel.CityArr)</th>
+        <th>@Html.DisplayNameFor(x => x.WrongInputRouteViewModel.Kilometres)</th>
     </tr>
     <tr>
         @using (Html.BeginForm())

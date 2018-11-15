@@ -12,8 +12,8 @@ namespace Lab06.MVC.Carriage.DAL.Interfaces
         IEnumerable<T> Get(Expression<Func<T, Boolean>> predicate,
             Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
             string includeProperties = "");
-        void Create(T item);
+        T Create(T item);
         void Update(T item);
-        void Delete(T item);
+        T Delete(T item);
     }
 }

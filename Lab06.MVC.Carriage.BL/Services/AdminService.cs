@@ -4,26 +4,25 @@ using System.Linq;
 using Lab06.MVC.Carriage.BL.Model;
 using Lab06.MVC.Carriage.BL.Infrastructure;
 using Lab06.MVC.Carriage.BL.Interfaces;
-using Lab06.MVC.Carriage.BL.Mappers;
 using Lab06.MVC.Carriage.DAL.Entities;
 using Lab06.MVC.Carriage.DAL.Interfaces;
 
 namespace Lab06.MVC.Carriage.BL.Services
 {
-    public class AdminService:IAdminService
+    public class AdminService : IAdminService
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IRepository<Trip> tripRepository;
         private readonly IRepository<Route> routeRepository;
-        private readonly ITripMapper tripMapper;
-        private readonly IRouteMapper routeMapper;
+        private readonly IWrapMapper<TripModel, Trip> tripMapper;
+        private readonly IWrapMapper<RouteModel, Route> routeMapper;
 
-        public AdminService(IUnitOfWork unitOfWork, ITripMapper tripMapper, IRouteMapper routeMapper)
+        public AdminService(IUnitOfWork unitOfWork, IWrapMapper<TripModel, Trip> tripMapper, IWrapMapper<RouteModel, Route> routeMapper)
         {
             this.unitOfWork = unitOfWork
                               ?? throw new ArgumentNullException(nameof(unitOfWork));
             tripRepository = this.unitOfWork.GetRepository<Trip>()
-                ??throw new ArgumentNullException(nameof(tripRepository));
+                ?? throw new ArgumentNullException(nameof(tripRepository));
             routeRepository = this.unitOfWork.GetRepository<Route>()
                              ?? throw new ArgumentNullException(nameof(routeRepository));
             this.tripMapper = tripMapper
@@ -37,14 +36,16 @@ namespace Lab06.MVC.Carriage.BL.Services
             return tripMapper.MapCollectionModels(tripRepository.GetAll());
         }
 
-        public void CreateTrip(TripModel item)
+        public OperationDetails CreateTrip(TripModel item)
         {
             var tripPoco = tripMapper.MapEntity(item);
-            tripRepository.Create(tripPoco);
+            var result = tripRepository.Create(tripPoco);
             unitOfWork.Save();
+
+            return new OperationDetails(true, $"Trip with id {result.Id} was successsfully created", "");
         }
 
-        public void UpdateTrip(TripModel item)
+        public OperationDetails UpdateTrip(TripModel item)
         {
             var tripPoco = tripMapper.MapEntity(item);
 
@@ -52,14 +53,14 @@ namespace Lab06.MVC.Carriage.BL.Services
             {
                 tripRepository.Update(tripPoco);
                 unitOfWork.Save();
+
+                return new OperationDetails(true, $"Trip with id {tripPoco.Id} was successsfully updated", "");
             }
-            else
-            {
-                throw new PassengersCarriageValidationException("There are orders for this trip, can't be updated", String.Empty);
-            }
+
+            throw new PassengersCarriageValidationException("There are orders for this trip, can't be updated", String.Empty);
         }
 
-        public void DeleteTrip(TripModel item)
+        public OperationDetails DeleteTrip(TripModel item)
         {
             var tripPoco = tripMapper.MapEntity(item);
 
@@ -67,11 +68,11 @@ namespace Lab06.MVC.Carriage.BL.Services
             {
                 tripRepository.Delete(tripPoco);
                 unitOfWork.Save();
+
+                return new OperationDetails(true, $"Trip with id {tripPoco.Id} was successsfully deleted", "");
             }
-            else
-            {
-                throw new PassengersCarriageValidationException("There are orders for this trip, can't be deleted", String.Empty);
-            }
+
+            throw new PassengersCarriageValidationException("There are orders for this trip, can't be deleted", String.Empty);
         }
 
         public IEnumerable<RouteModel> GetAllRoutes()
@@ -79,43 +80,45 @@ namespace Lab06.MVC.Carriage.BL.Services
             return routeMapper.MapCollectionModels(routeRepository.GetAll());
         }
 
-        public void CreateRoute(RouteModel item)
+        public OperationDetails CreateRoute(RouteModel item)
         {
             var routePoco = routeMapper.MapEntity(item);
 
-            if (GetExistedRoute(item)==null)
+            if (GetExistedRoute(item) == null)
             {
-                routeRepository.Create(routePoco);
+                var result = routeRepository.Create(routePoco);
                 unitOfWork.Save();
+
+                return new OperationDetails(true, $"Route with id {result.Id} was successsfully created", "");
             }
-            else
-            {
-                throw new PassengersCarriageValidationException("This route already exists", String.Empty);
-            }
+
+            throw new PassengersCarriageValidationException("This route already exists", String.Empty);
         }
 
-        public void UpdateRoute(RouteModel item)
+        public OperationDetails UpdateRoute(RouteModel item)
         {
             var routePoco = routeMapper.MapEntity(item);
 
-            if (GetExistedRoute(item) == null || GetExistedRoute(item).RouteId == item.RouteId)
+            if (GetExistedRoute(item) == null || GetExistedRoute(item).Id == item.Id)
             {
                 routeRepository.Update(routePoco);
                 unitOfWork.Save();
+
+                return new OperationDetails(true, $"Route with id {routePoco.Id} was successsfully updated", "");
             }
-            else
-            {
-                throw new PassengersCarriageValidationException("This route already exists", String.Empty);
-            }
+
+            throw new PassengersCarriageValidationException("This route already exists", String.Empty);
         }
 
-        public void DeleteRoute(RouteModel item)
+        public OperationDetails DeleteRoute(RouteModel item)
         {
             var routePoco = routeMapper.MapEntity(item);
-            routeRepository.Delete(routePoco);
+            var result = routeRepository.Delete(routePoco);
             try
             {
                 unitOfWork.Save();
+
+                return new OperationDetails(true, $"Route with id {result.Id} was successsfully deleted", "");
             }
             catch
             {
@@ -123,8 +126,8 @@ namespace Lab06.MVC.Carriage.BL.Services
             }
         }
 
-        public Route GetExistedRoute(RouteModel route) => 
-            routeRepository.Get(r => r.CityArr == route.CityArr 
+        public Route GetExistedRoute(RouteModel route) =>
+            routeRepository.Get(r => r.CityArr == route.CityArr
                                      && r.CityDepart == route.CityDepart)
                 .FirstOrDefault();
     }

@@ -31,18 +31,18 @@ namespace Lab06.MVC.Carriage.DAL.Context
             modelBuilder.Entity<AppUser>().Property(p => p.FirstName).HasColumnType("NVARCHAR").HasMaxLength(50);
             modelBuilder.Entity<AppUser>().Property(p => p.LastName).HasColumnType("NVARCHAR").HasMaxLength(50);
 
-            modelBuilder.Entity<Route>().HasKey(p => p.RouteId);
+            modelBuilder.Entity<Route>().HasKey(p => p.Id);
             modelBuilder.Entity<Route>().Property(p => p.CityArr).IsRequired();
             modelBuilder.Entity<Route>().Property(p => p.CityDepart).IsRequired();
 
-            modelBuilder.Entity<Trip>().HasKey(p => p.TripId);
+            modelBuilder.Entity<Trip>().HasKey(p => p.Id);
             modelBuilder.Entity<Trip>().Property(p => p.Arrival).IsRequired();
             modelBuilder.Entity<Trip>().Property(p => p.Departure).IsRequired();
             modelBuilder.Entity<Trip>().Property(p => p.FreeSeetsNumbers).HasColumnType("xml").IsRequired();
             modelBuilder.Entity<Trip>().Property(p => p.Price).IsRequired();
             modelBuilder.Entity<Trip>().HasRequired(p => p.Route).WithMany(p => p.Trips).HasForeignKey(p => p.RouteId);
 
-            modelBuilder.Entity<Order>().HasKey(p => p.OrderId);
+            modelBuilder.Entity<Order>().HasKey(p => p.Id);
             modelBuilder.Entity<Order>().Property(p => p.SeatNumber).IsRequired();
             modelBuilder.Entity<Order>().HasRequired(p => p.Trip).WithMany(p => p.Orders).HasForeignKey(p => p.TripId);
             modelBuilder.Entity<Order>().HasRequired(p => p.User).WithMany(p => p.Orders).HasForeignKey(p => p.UserId);

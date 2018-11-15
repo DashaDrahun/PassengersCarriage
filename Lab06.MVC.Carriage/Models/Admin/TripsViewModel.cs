@@ -1,7 +1,6 @@
-﻿using Lab06.MVC.Carriage.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Lab06.MVC.Carriage.ViewModelsForViews.Admin
+namespace Lab06.MVC.Carriage.Models.Admin
 {
     public class TripsViewModel
     {

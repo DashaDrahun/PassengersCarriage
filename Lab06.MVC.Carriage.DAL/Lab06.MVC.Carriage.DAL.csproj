@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Context\PassengersContext.cs" />
+    <Compile Include="Interfaces\IEntity.cs" />
     <Compile Include="Identity\ApplicationRole.cs" />
     <Compile Include="Entities\AppUser.cs" />
     <Compile Include="Entities\Order.cs" />
